@@ -35,7 +35,7 @@ public class GroqVisionAdapter {
     public String analyzeImage(String base64Image, String prompt) throws LlamaException {
         try {
             String requestBody = objectMapper.writeValueAsString(Map.of(
-                "model", "meta-llama/llama-3.2-11b-vision-instruct:free",
+                "model", "meta-llama/llama-3.2-11b-vision-instruct",
                 "messages", new Object[]{
                     Map.of(
                         "role", "user",
