@@ -15,5 +15,10 @@ if [ -z "$GROQ_API_KEY" ]; then
     exit 1
 fi
 
+if [ ! -f target/clinical-copilot-1.0.0.jar ]; then
+    echo "📦 Building application..."
+    mvn clean package -DskipTests -q
+fi
+
 echo "🚀 Starting Clinical Copilot with LLAMA 3.3 70B API..."
 java -jar target/clinical-copilot-1.0.0.jar

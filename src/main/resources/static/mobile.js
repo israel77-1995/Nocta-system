@@ -31,7 +31,7 @@ function showScreen(screenId) {
     document.getElementById(screenId).classList.add('active');
 }
 
-function login() {
+async function login() {
     const clinicianId = document.getElementById('clinicianId').value.trim();
     if (!clinicianId) {
         alert('Please enter Clinician ID');
@@ -41,6 +41,7 @@ function login() {
     console.log('Logged in as clinician:', currentClinician);
     document.getElementById('clinicianName').textContent = 'Clinician: ' + clinicianId.substring(0, 8) + '...';
     showScreen('dashboardScreen');
+    await loadPatients();
     loadDashboardStats();
 }
 
@@ -53,6 +54,77 @@ function logout() {
 
 function showAllHistory() {
     showScreen('patientScreen');
+}
+
+async function loadPatients() {
+    try {
+        const patients = await apiCall('/patients');
+        console.log('Loaded patients:', patients.length);
+        displayPatients(patients);
+    } catch (error) {
+        console.error('Error loading patients:', error);
+        alert('Error loading patients: ' + error.message);
+    }
+}
+
+function displayPatients(patients) {
+    const listEl = document.getElementById('dashboardPatientList');
+    listEl.innerHTML = '';
+    
+    patients.forEach(patient => {
+        const fullName = `${patient.firstName} ${patient.lastName}`;
+        const initials = `${patient.firstName[0]}${patient.lastName[0]}`;
+        const age = calculateAge(patient.dob);
+        
+        const allergiesText = patient.allergies && patient.allergies.length > 0 
+            ? patient.allergies.join(', ') 
+            : 'None';
+        const chronicText = patient.chronicConditions && patient.chronicConditions.length > 0
+            ? patient.chronicConditions[0]
+            : 'None';
+        
+        const card = document.createElement('div');
+        card.className = 'patient-card-enhanced';
+        card.onclick = () => selectPatientFromDashboard(patient.id, fullName);
+        
+        card.innerHTML = `
+            <div class="patient-card-header">
+                <div class="patient-avatar">${initials}</div>
+                <div class="patient-info">
+                    <h3>${fullName}</h3>
+                    <p class="patient-meta">${age} years • MRN: ${patient.medicalRecordNumber}</p>
+                </div>
+            </div>
+            <div class="patient-alerts">
+                ${patient.allergies && patient.allergies.length > 0 ? 
+                    patient.allergies.map(a => `<span class="alert-badge allergy">⚠️ ${a}</span>`).join('') : 
+                    '<span class="alert-badge">No allergies</span>'}
+                ${patient.chronicConditions && patient.chronicConditions.length > 0 ? 
+                    `<span class="alert-badge chronic">💊 ${patient.chronicConditions[0]}</span>` : ''}
+            </div>
+            <div class="patient-actions">
+                <button class="action-btn primary" onclick="event.stopPropagation(); startConsultation('${patient.id}', '${fullName}')">
+                    ➕ New Visit
+                </button>
+                <button class="action-btn secondary" onclick="event.stopPropagation(); viewHistory('${patient.id}', '${fullName}')">
+                    📋 History
+                </button>
+            </div>
+        `;
+        
+        listEl.appendChild(card);
+    });
+}
+
+function calculateAge(dob) {
+    const birthDate = new Date(dob);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    return age;
 }
 
 async function loadDashboardStats() {
@@ -91,31 +163,28 @@ function startConsultation(patientId, patientName) {
 
 async function loadPatientContext(patientId, patientName) {
     try {
-        const history = await apiCall(`/consultations/patient/${patientId}/history`);
+        const [patient, history] = await Promise.all([
+            apiCall(`/patients/${patientId}`),
+            apiCall(`/consultations/patient/${patientId}/history`)
+        ]);
         
         const contextEl = document.getElementById('patientContext');
         const alertsEl = document.getElementById('contextAlerts');
         const lastVisitEl = document.getElementById('lastVisit');
         
         // Show patient alerts
-        const patientData = {
-            '550e8400-e29b-41d4-a716-446655440001': {
-                allergies: 'Penicillin',
-                chronic: 'Hypertension'
-            },
-            '550e8400-e29b-41d4-a716-446655440002': {
-                allergies: 'NSAIDs',
-                chronic: 'Type 2 Diabetes'
-            }
-        };
-        
-        const patient = patientData[patientId];
-        if (patient) {
-            alertsEl.innerHTML = `
-                <span class="alert-badge allergy">⚠️ Allergies: ${patient.allergies}</span>
-                <span class="alert-badge chronic">💊 Chronic: ${patient.chronic}</span>
-            `;
+        let alertsHtml = '';
+        if (patient.allergies && patient.allergies.length > 0) {
+            alertsHtml += patient.allergies.map(a => 
+                `<span class="alert-badge allergy">⚠️ ${a}</span>`
+            ).join('');
         }
+        if (patient.chronicConditions && patient.chronicConditions.length > 0) {
+            alertsHtml += patient.chronicConditions.map(c => 
+                `<span class="alert-badge chronic">💊 ${c}</span>`
+            ).join('');
+        }
+        alertsEl.innerHTML = alertsHtml || '<span class="alert-badge">No known allergies or chronic conditions</span>';
         
         // Show last visit
         if (history && history.length > 0) {
