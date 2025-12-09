@@ -4,7 +4,7 @@ import { WebView } from 'react-native-webview';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-const API_URL = 'http://192.168.8.114:8080';
+const API_URL = 'http://192.168.1.95:8080';
 
 export default function App() {
   const webViewRef = useRef(null);

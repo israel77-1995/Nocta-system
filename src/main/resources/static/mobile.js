@@ -3,9 +3,18 @@ if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js')
             .then(registration => console.log('SW registered'))
-            .catch(error => console.log('SW registration failed'));
+            .catch(error => console.log('SW registration failed:', error));
     });
 }
+
+// Add error handler to catch any JavaScript errors
+window.addEventListener('error', (e) => {
+    console.error('Global error:', e.error);
+});
+
+window.addEventListener('unhandledrejection', (e) => {
+    console.error('Unhandled promise rejection:', e.reason);
+});
 
 // API Configuration
 const API_BASE_URL = window.location.origin + '/api/v1';
