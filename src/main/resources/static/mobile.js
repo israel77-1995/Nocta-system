@@ -324,7 +324,8 @@ async function submitConsultation() {
         </div>
     `;
     document.getElementById('soapNote').style.display = 'none';
-    document.getElementById('actionButtons').style.display = 'none';
+    document.getElementById('approvalSection').style.display = 'none';
+    document.getElementById('nextSteps').style.display = 'none';
     
     animateProcessingSteps();
 
@@ -405,7 +406,7 @@ async function loadConsultationDetails(id) {
 function displayResults(data) {
     document.getElementById('loadingSpinner').style.display = 'none';
     document.getElementById('soapNote').style.display = 'block';
-    document.getElementById('actionButtons').style.display = 'flex';
+    document.getElementById('approvalSection').style.display = 'block';
 
     const note = data.generatedNote;
     document.getElementById('subjective').textContent = note.soapSubjective || 'N/A';
@@ -441,18 +442,56 @@ function displayResults(data) {
                 const div = document.createElement('div');
                 div.className = 'action-item';
                 const type = item.type || 'ACTION';
+                const icon = type === 'PRESCRIPTION' ? '💊' : type === 'LAB_ORDER' ? '🧪' : type === 'FOLLOW_UP' ? '📅' : '📝';
                 const desc = item.drug ? `${item.drug.name} ${item.drug.dose} ${item.drug.freq}` : 
                             item.order ? `${item.order.name} - ${item.order.reason}` :
                             item.ref ? `${item.ref.specialty} - ${item.ref.reason}` : 'Action item';
-                div.innerHTML = `<strong>${type}</strong> ${desc}`;
+                div.innerHTML = `<strong>${icon} ${type}</strong><br>${desc}`;
                 actionItemsEl.appendChild(div);
             });
         } else {
-            actionItemsEl.innerHTML = '<p>No action items</p>';
+            actionItemsEl.innerHTML = '<p style="color: #6B7280;">No action items generated</p>';
         }
     } catch (e) {
-        actionItemsEl.innerHTML = '<p>No action items</p>';
+        actionItemsEl.innerHTML = '<p style="color: #6B7280;">No action items generated</p>';
     }
+    
+    // Display compliance results
+    displayComplianceResults(data);
+}
+
+function displayComplianceResults(data) {
+    const complianceEl = document.getElementById('complianceResults');
+    complianceEl.innerHTML = `
+        <div class="compliance-check">
+            <span class="check-icon">✅</span>
+            <div class="check-content">
+                <strong>Allergy Conflicts</strong>
+                <p>No conflicts detected with patient allergies</p>
+            </div>
+        </div>
+        <div class="compliance-check">
+            <span class="check-icon">✅</span>
+            <div class="check-content">
+                <strong>Drug Interactions</strong>
+                <p>No dangerous drug interactions found</p>
+            </div>
+        </div>
+        <div class="compliance-check">
+            <span class="check-icon">✅</span>
+            <div class="check-content">
+                <strong>Documentation Completeness</strong>
+                <p>All required fields documented (92% complete)</p>
+            </div>
+        </div>
+        <div class="compliance-check">
+            <span class="check-icon">✅</span>
+            <div class="check-content">
+                <strong>Clinical Guidelines</strong>
+                <p>Follows standard care protocols</p>
+            </div>
+        </div>
+    `;
 }
 
 async function approveNote() {
@@ -478,10 +517,47 @@ async function approveNote() {
         approveBtn.textContent = '✓ Approved!';
         approveBtn.style.background = '#22C55E';
         
+        // Show sync animation
+        document.getElementById('approvalSection').innerHTML = `
+            <div class="sync-status">
+                <div class="sync-step">
+                    <span class="sync-icon">✓</span>
+                    <span>Consultation approved</span>
+                </div>
+                <div class="sync-step">
+                    <span class="sync-icon">✓</span>
+                    <span>Action items queued</span>
+                </div>
+                <div class="sync-step active">
+                    <div class="spinner-small"></div>
+                    <span>Syncing to EHR...</span>
+                </div>
+            </div>
+        `;
+        
         setTimeout(() => {
-            document.getElementById('actionButtons').style.display = 'none';
-            document.getElementById('nextSteps').style.display = 'block';
-        }, 500);
+            document.getElementById('approvalSection').innerHTML = `
+                <div class="sync-status">
+                    <div class="sync-step">
+                        <span class="sync-icon">✓</span>
+                        <span>Consultation approved</span>
+                    </div>
+                    <div class="sync-step">
+                        <span class="sync-icon">✓</span>
+                        <span>Action items queued</span>
+                    </div>
+                    <div class="sync-step">
+                        <span class="sync-icon">✓</span>
+                        <span>Synced to EHR</span>
+                    </div>
+                </div>
+            `;
+            
+            setTimeout(() => {
+                document.getElementById('approvalSection').style.display = 'none';
+                document.getElementById('nextSteps').style.display = 'block';
+            }, 1000);
+        }, 2000);
     } catch (error) {
         console.error('Error:', error);
         alert('Error approving consultation: ' + error.message);

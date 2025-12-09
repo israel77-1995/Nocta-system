@@ -1,4 +1,4 @@
-🚀 Starting Clinical Copilot with LLAMA 3.3 70B API...
+nohup: ignoring input
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -8,131 +8,101 @@
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::                (v3.1.5)
 
-2025-12-09T18:04:36.292+02:00  INFO 40364 --- [           main] za.co.ccos.ClinicalCopilotApplication    : Starting ClinicalCopilotApplication v1.0.0 using Java 21.0.8 with PID 40364 (/home/wtc/Nocta-system/target/clinical-copilot-1.0.0.jar started by wtc in /home/wtc/Nocta-system)
-2025-12-09T18:04:36.295+02:00  INFO 40364 --- [           main] za.co.ccos.ClinicalCopilotApplication    : The following 1 profile is active: "dev"
-2025-12-09T18:04:38.722+02:00  INFO 40364 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2025-12-09T18:04:38.723+02:00  INFO 40364 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
-2025-12-09T18:04:38.809+02:00  INFO 40364 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2025-12-09T18:04:39.214+02:00  INFO 40364 --- [           main] o.f.c.internal.license.VersionPrinter    : Flyway Community Edition 9.16.3 by Redgate
-2025-12-09T18:04:39.214+02:00  INFO 40364 --- [           main] o.f.c.internal.license.VersionPrinter    : See release notes here: https://rd.gt/416ObMi
-2025-12-09T18:04:39.214+02:00  INFO 40364 --- [           main] o.f.c.internal.license.VersionPrinter    : 
-2025-12-09T18:04:39.227+02:00  INFO 40364 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2025-12-09T18:04:39.468+02:00  INFO 40364 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:clinicaldb user=SA
-2025-12-09T18:04:39.471+02:00  INFO 40364 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2025-12-09T18:04:39.486+02:00  INFO 40364 --- [           main] o.f.c.i.database.base.BaseDatabaseType   : Database: jdbc:h2:mem:clinicaldb (H2 2.1)
-2025-12-09T18:04:39.553+02:00  INFO 40364 --- [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table "PUBLIC"."flyway_schema_history" does not exist yet
-2025-12-09T18:04:39.562+02:00  INFO 40364 --- [           main] o.f.core.internal.command.DbValidate     : Successfully validated 3 migrations (execution time 00:00.022s)
-2025-12-09T18:04:39.569+02:00  INFO 40364 --- [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table "PUBLIC"."flyway_schema_history" ...
-2025-12-09T18:04:39.598+02:00  INFO 40364 --- [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "PUBLIC": << Empty Schema >>
-2025-12-09T18:04:39.608+02:00  INFO 40364 --- [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "PUBLIC" to version "1 - initial schema"
-2025-12-09T18:04:39.632+02:00  INFO 40364 --- [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "PUBLIC" to version "2 - sample data"
-2025-12-09T18:04:39.642+02:00  INFO 40364 --- [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "PUBLIC" to version "3 - add vital signs"
-2025-12-09T18:04:39.677+02:00  INFO 40364 --- [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 3 migrations to schema "PUBLIC", now at version v3 (execution time 00:00.082s)
-2025-12-09T18:04:39.780+02:00  INFO 40364 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2025-12-09T18:04:39.834+02:00  INFO 40364 --- [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.2.13.Final
-2025-12-09T18:04:39.837+02:00  INFO 40364 --- [           main] org.hibernate.cfg.Environment            : HHH000406: Using bytecode reflection optimizer
-2025-12-09T18:04:41.185+02:00  INFO 40364 --- [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2025-12-09T18:04:41.898+02:00  WARN 40364 --- [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2025-12-09T18:04:41.924+02:00  WARN 40364 --- [           main] .s.s.UserDetailsServiceAutoConfiguration : 
-
-Using generated security password: 728d55d6-8728-45f5-9ab7-00ed7144d4aa
-
-This generated password is for development use only. Your security configuration must be updated before running your application in production.
-
-2025-12-09T18:04:42.728+02:00  INFO 40364 --- [           main] za.co.ccos.ClinicalCopilotApplication    : Started ClinicalCopilotApplication in 7.143 seconds (process running for 8.009)
-2025-12-09T18:05:30.436+02:00  INFO 40364 --- [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2025-12-09T18:05:41.266+02:00  INFO 40364 --- [nio-8080-exec-4] za.co.ccos.web.ConsultationController    : Fetching consultation history for patient 550e8400-e29b-41d4-a716-446655440001
-2025-12-09T18:05:45.017+02:00  INFO 40364 --- [nio-8080-exec-5] za.co.ccos.web.ConsultationController    : Fetching consultation history for patient 550e8400-e29b-41d4-a716-446655440001
-2025-12-09T18:05:51.260+02:00  INFO 40364 --- [nio-8080-exec-6] za.co.ccos.web.ConsultationController    : Fetching consultation history for patient 550e8400-e29b-41d4-a716-446655440001
-2025-12-09T18:05:57.198+02:00  INFO 40364 --- [nio-8080-exec-7] za.co.ccos.web.ConsultationController    : Fetching consultation history for patient 550e8400-e29b-41d4-a716-446655440001
-2025-12-09T18:06:07.660+02:00  INFO 40364 --- [nio-8080-exec-9] za.co.ccos.web.ConsultationController    : Fetching consultation history for patient 550e8400-e29b-41d4-a716-446655440001
-2025-12-09T18:06:54.471+02:00  INFO 40364 --- [nio-8080-exec-1] za.co.ccos.web.ConsultationController    : Received consultation upload for patient 550e8400-e29b-41d4-a716-446655440001
-2025-12-09T18:06:55.353+02:00  INFO 40364 --- [         task-1] z.co.ccos.app.ConsultationOrchestrator   : Starting async processing of consultation 6d688889-9569-490c-b685-8fe265df15f4
-2025-12-09T18:06:55.436+02:00  INFO 40364 --- [         task-1] z.co.ccos.app.ConsultationOrchestrator   : Processing consultation 6d688889-9569-490c-b685-8fe265df15f4 for patient 550e8400-e29b-41d4-a716-446655440001
-2025-12-09T18:06:55.452+02:00  INFO 40364 --- [         task-1] za.co.ccos.app.PerceptionService         : Running perception agent for patient 550e8400-e29b-41d4-a716-446655440001
-2025-12-09T18:06:55.609+02:00  INFO 40364 --- [         task-1] za.co.ccos.infra.llm.GroqLlamaAdapter    : Sending request to Groq API
-2025-12-09T18:07:04.703+02:00  INFO 40364 --- [         task-1] za.co.ccos.infra.llm.GroqLlamaAdapter    : Groq response received in 9081ms
-2025-12-09T18:07:04.707+02:00  INFO 40364 --- [         task-1] za.co.ccos.app.DocumentationService      : Running documentation agent for consultation 6d688889-9569-490c-b685-8fe265df15f4
-2025-12-09T18:07:04.708+02:00  INFO 40364 --- [         task-1] za.co.ccos.infra.llm.GroqLlamaAdapter    : Sending request to Groq API
-2025-12-09T18:07:08.130+02:00  INFO 40364 --- [         task-1] za.co.ccos.infra.llm.GroqLlamaAdapter    : Groq response received in 3421ms
-2025-12-09T18:07:08.142+02:00  INFO 40364 --- [         task-1] za.co.ccos.app.CoordinationService       : Running coordination agent
-2025-12-09T18:07:08.142+02:00  INFO 40364 --- [         task-1] za.co.ccos.infra.llm.GroqLlamaAdapter    : Sending request to Groq API
-2025-12-09T18:07:14.937+02:00  INFO 40364 --- [         task-1] za.co.ccos.infra.llm.GroqLlamaAdapter    : Groq response received in 6792ms
-2025-12-09T18:07:14.939+02:00  INFO 40364 --- [         task-1] za.co.ccos.app.ComplianceService         : Running compliance agent
-2025-12-09T18:07:14.942+02:00  INFO 40364 --- [         task-1] za.co.ccos.infra.llm.GroqLlamaAdapter    : Sending request to Groq API
-2025-12-09T18:07:29.688+02:00  INFO 40364 --- [         task-1] za.co.ccos.infra.llm.GroqLlamaAdapter    : Groq response received in 14745ms
-2025-12-09T18:07:29.690+02:00  INFO 40364 --- [         task-1] z.co.ccos.app.ConsultationOrchestrator   : Compliance check result: {
+2025-12-09T20:04:50.432+02:00  INFO 95130 --- [           main] za.co.ccos.ClinicalCopilotApplication    : Starting ClinicalCopilotApplication v1.0.0 using Java 21.0.8 with PID 95130 (/home/wtc/Nocta-system/target/clinical-copilot-1.0.0.jar started by wtc in /home/wtc/Nocta-system)
+2025-12-09T20:04:50.435+02:00  INFO 95130 --- [           main] za.co.ccos.ClinicalCopilotApplication    : The following 1 profile is active: "dev"
+2025-12-09T20:04:53.584+02:00  INFO 95130 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-12-09T20:04:53.584+02:00  INFO 95130 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2025-12-09T20:04:53.690+02:00  INFO 95130 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-12-09T20:04:54.186+02:00  INFO 95130 --- [           main] o.f.c.internal.license.VersionPrinter    : Flyway Community Edition 9.16.3 by Redgate
+2025-12-09T20:04:54.186+02:00  INFO 95130 --- [           main] o.f.c.internal.license.VersionPrinter    : See release notes here: https://rd.gt/416ObMi
+2025-12-09T20:04:54.186+02:00  INFO 95130 --- [           main] o.f.c.internal.license.VersionPrinter    : 
+2025-12-09T20:04:54.202+02:00  INFO 95130 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-12-09T20:04:54.467+02:00  INFO 95130 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:clinicaldb user=SA
+2025-12-09T20:04:54.469+02:00  INFO 95130 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-12-09T20:04:54.487+02:00  INFO 95130 --- [           main] o.f.c.i.database.base.BaseDatabaseType   : Database: jdbc:h2:mem:clinicaldb (H2 2.1)
+2025-12-09T20:04:54.564+02:00  INFO 95130 --- [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table "PUBLIC"."flyway_schema_history" does not exist yet
+2025-12-09T20:04:54.567+02:00  INFO 95130 --- [           main] o.f.core.internal.command.DbValidate     : Successfully validated 3 migrations (execution time 00:00.016s)
+2025-12-09T20:04:54.577+02:00  INFO 95130 --- [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table "PUBLIC"."flyway_schema_history" ...
+2025-12-09T20:04:54.609+02:00  INFO 95130 --- [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "PUBLIC": << Empty Schema >>
+2025-12-09T20:04:54.623+02:00  INFO 95130 --- [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "PUBLIC" to version "1 - initial schema"
+2025-12-09T20:04:54.648+02:00  INFO 95130 --- [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "PUBLIC" to version "2 - sample data"
+2025-12-09T20:04:54.659+02:00  INFO 95130 --- [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "PUBLIC" to version "3 - add vital signs"
+2025-12-09T20:04:54.695+02:00  INFO 95130 --- [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 3 migrations to schema "PUBLIC", now at version v3 (execution time 00:00.091s)
+2025-12-09T20:04:54.817+02:00  INFO 95130 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-12-09T20:04:54.888+02:00  INFO 95130 --- [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.2.13.Final
+2025-12-09T20:04:54.891+02:00  INFO 95130 --- [           main] org.hibernate.cfg.Environment            : HHH000406: Using bytecode reflection optimizer
+2025-12-09T20:04:56.938+02:00  INFO 95130 --- [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-12-09T20:04:57.933+02:00  WARN 95130 --- [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-12-09T20:04:58.723+02:00  WARN 95130 --- [           main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - canc2025-12-09T20:06:18.614+02:00  INFO 93085 --- [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-12-09T20:06:20.199+02:00  INFO 93085 --- [nio-8080-exec-2] za.co.ccos.infra.llm.GroqLlamaAdapter    : Sending request to Groq API
+2025-12-09T20:06:27.217+02:00  INFO 93085 --- [nio-8080-exec-2] za.co.ccos.infra.llm.GroqLlamaAdapter    : Groq response received in 6877ms
+2025-12-09T20:09:21.832+02:00  INFO 93085 --- [nio-8080-exec-3] za.co.ccos.web.ConsultationController    : Received consultation upload for patient 550e8400-e29b-41d4-a716-446655440001
+2025-12-09T20:09:23.393+02:00  INFO 93085 --- [         task-1] z.co.ccos.app.ConsultationOrchestrator   : Starting async processing of consultation 5d2ea8d2-e115-4e18-83ad-7b7a83c0a119
+2025-12-09T20:09:23.557+02:00  INFO 93085 --- [         task-1] z.co.ccos.app.ConsultationOrchestrator   : Processing consultation 5d2ea8d2-e115-4e18-83ad-7b7a83c0a119 for patient 550e8400-e29b-41d4-a716-446655440001
+2025-12-09T20:09:23.584+02:00  INFO 93085 --- [         task-1] za.co.ccos.app.PerceptionService         : Running perception agent for patient 550e8400-e29b-41d4-a716-446655440001
+2025-12-09T20:09:23.601+02:00  INFO 93085 --- [         task-1] za.co.ccos.infra.llm.GroqLlamaAdapter    : Sending request to Groq API
+2025-12-09T20:09:25.601+02:00  INFO 93085 --- [         task-1] za.co.ccos.infra.llm.GroqLlamaAdapter    : Groq response received in 1982ms
+2025-12-09T20:09:25.755+02:00  INFO 93085 --- [         task-1] za.co.ccos.app.DocumentationService      : Running documentation agent for consultation 5d2ea8d2-e115-4e18-83ad-7b7a83c0a119
+2025-12-09T20:09:25.755+02:00  INFO 93085 --- [         task-1] za.co.ccos.infra.llm.GroqLlamaAdapter    : Sending request to Groq API
+2025-12-09T20:09:27.209+02:00  INFO 93085 --- [         task-1] za.co.ccos.infra.llm.GroqLlamaAdapter    : Groq response received in 1453ms
+2025-12-09T20:09:27.238+02:00  INFO 93085 --- [         task-1] za.co.ccos.app.CoordinationService       : Running coordination agent
+2025-12-09T20:09:27.240+02:00  INFO 93085 --- [         task-1] za.co.ccos.infra.llm.GroqLlamaAdapter    : Sending request to Groq API
+2025-12-09T20:09:28.479+02:00  INFO 93085 --- [         task-1] za.co.ccos.infra.llm.GroqLlamaAdapter    : Groq response received in 1237ms
+2025-12-09T20:09:28.482+02:00  INFO 93085 --- [         task-1] za.co.ccos.app.ComplianceService         : Running compliance agent
+2025-12-09T20:09:28.483+02:00  INFO 93085 --- [         task-1] za.co.ccos.infra.llm.GroqLlamaAdapter    : Sending request to Groq API
+2025-12-09T20:09:29.284+02:00  INFO 93085 --- [         task-1] za.co.ccos.infra.llm.GroqLlamaAdapter    : Groq response received in 800ms
+2025-12-09T20:09:29.284+02:00  INFO 93085 --- [         task-1] z.co.ccos.app.ConsultationOrchestrator   : Compliance check result: {
+  "issues": [],
+  "suggested_edits": [],
+  "compliance_ok": true
+}
+2025-12-09T20:09:29.311+02:00  INFO 93085 --- [         task-1] z.co.ccos.app.ConsultationOrchestrator   : Consultation 5d2ea8d2-e115-4e18-83ad-7b7a83c0a119 processed successfully
+2025-12-09T20:10:36.666+02:00  INFO 93085 --- [nio-8080-exec-7] za.co.ccos.web.ConsultationController    : Fetching consultation history for patient 550e8400-e29b-41d4-a716-446655440001
+2025-12-09T20:11:29.515+02:00  INFO 93085 --- [nio-8080-exec-9] za.co.ccos.web.ConsultationController    : Received consultation upload for patient 550e8400-e29b-41d4-a716-446655440001
+2025-12-09T20:11:29.857+02:00  INFO 93085 --- [         task-2] z.co.ccos.app.ConsultationOrchestrator   : Starting async processing of consultation a12b1346-b49b-47de-8401-f296cdd40633
+2025-12-09T20:11:29.905+02:00  INFO 93085 --- [         task-2] z.co.ccos.app.ConsultationOrchestrator   : Processing consultation a12b1346-b49b-47de-8401-f296cdd40633 for patient 550e8400-e29b-41d4-a716-446655440001
+2025-12-09T20:11:29.941+02:00  INFO 93085 --- [         task-2] za.co.ccos.app.PerceptionService         : Running perception agent for patient 550e8400-e29b-41d4-a716-446655440001
+2025-12-09T20:11:29.981+02:00  INFO 93085 --- [         task-2] za.co.ccos.infra.llm.GroqLlamaAdapter    : Sending request to Groq API
+2025-12-09T20:11:31.670+02:00  INFO 93085 --- [         task-2] za.co.ccos.infra.llm.GroqLlamaAdapter    : Groq response received in 1675ms
+2025-12-09T20:11:31.675+02:00  INFO 93085 --- [         task-2] za.co.ccos.app.DocumentationService      : Running documentation agent for consultation a12b1346-b49b-47de-8401-f296cdd40633
+2025-12-09T20:11:31.678+02:00  INFO 93085 --- [         task-2] za.co.ccos.infra.llm.GroqLlamaAdapter    : Sending request to Groq API
+2025-12-09T20:11:32.757+02:00  INFO 93085 --- [         task-2] za.co.ccos.infra.llm.GroqLlamaAdapter    : Groq response received in 1078ms
+2025-12-09T20:11:32.763+02:00  INFO 93085 --- [         task-2] za.co.ccos.app.CoordinationService       : Running coordination agent
+2025-12-09T20:11:32.764+02:00  INFO 93085 --- [         task-2] za.co.ccos.infra.llm.GroqLlamaAdapter    : Sending request to Groq API
+2025-12-09T20:11:34.139+02:00  INFO 93085 --- [         task-2] za.co.ccos.infra.llm.GroqLlamaAdapter    : Groq response received in 1374ms
+2025-12-09T20:11:34.141+02:00  INFO 93085 --- [         task-2] za.co.ccos.app.ComplianceService         : Running compliance agent
+2025-12-09T20:11:34.143+02:00  INFO 93085 --- [         task-2] za.co.ccos.infra.llm.GroqLlamaAdapter    : Sending request to Groq API
+2025-12-09T20:11:35.115+02:00  INFO 93085 --- [         task-2] za.co.ccos.infra.llm.GroqLlamaAdapter    : Groq response received in 971ms
+2025-12-09T20:11:35.115+02:00  INFO 93085 --- [         task-2] z.co.ccos.app.ConsultationOrchestrator   : Compliance check result: {
   "issues": [
     {
-      "type": "ALLERGY_CONFLICT",
-      "detail": "Patient is on antiretroviral therapy (ARVs) and has a history of tobacco use, but no known allergies are listed. However, Penicillin is mentioned, implying a potential allergy concern, but no Penicillin prescription is noted in the plan."
-    },
-    {
-      "type": "INCOMPLETE_INFORMATION",
-      "detail": "No vitals available at this time, which may impact assessment and plan."
+      "type": "INCOMPLETE_OBJECTIVE",
+      "detail": "No vitals or medications reported in the objective section."
     },
     {
       "type": "BILLING_CODING_MISMATCH",
-      "detail": "Code R55 is the most confident diagnosis, but the plan does not specify a clear course of action for syncope and collapse."
+      "detail": "Code R56.9 for seizure is reported but no corresponding medication or treatment plan is mentioned."
+    },
+    {
+      "type": "ALLERGY_CONFLICT",
+      "detail": "Patient has an allergy to Penicillin but no corresponding caution or alternative is mentioned in the plan."
     }
   ],
   "suggested_edits": [
     {
       "field": "objective",
-      "suggestion": "Add vitals as soon as they become available to support assessment and plan."
+      "suggestion": "Add vitals and medications to the objective section."
     },
     {
       "field": "plan",
-      "suggestion": "Specify a clear course of action for the most likely diagnosis (syncope and collapse) and consider adding allergy information for Penicillin."
+      "suggestion": "Add a statement to avoid Penicillin and consider alternative treatments."
     }
   ],
   "compliance_ok": false
 }
-2025-12-09T18:07:29.705+02:00  INFO 40364 --- [         task-1] z.co.ccos.app.ConsultationOrchestrator   : Consultation 6d688889-9569-490c-b685-8fe265df15f4 processed successfully
-2025-12-09T18:07:34.993+02:00  INFO 40364 --- [nio-8080-exec-2] za.co.ccos.web.ConsultationController    : Received consultation upload for patient 550e8400-e29b-41d4-a716-446655440001
-2025-12-09T18:07:35.005+02:00  INFO 40364 --- [         task-2] z.co.ccos.app.ConsultationOrchestrator   : Starting async processing of consultation ff9d2114-4008-4ddf-9e43-b0a404b54710
-2025-12-09T18:07:35.020+02:00  INFO 40364 --- [         task-2] z.co.ccos.app.ConsultationOrchestrator   : Processing consultation ff9d2114-4008-4ddf-9e43-b0a404b54710 for patient 550e8400-e29b-41d4-a716-446655440001
-2025-12-09T18:07:35.021+02:00  INFO 40364 --- [         task-2] za.co.ccos.app.PerceptionService         : Running perception agent for patient 550e8400-e29b-41d4-a716-446655440001
-2025-12-09T18:07:35.022+02:00  INFO 40364 --- [         task-2] za.co.ccos.infra.llm.GroqLlamaAdapter    : Sending request to Groq API
-2025-12-09T18:07:37.140+02:00  INFO 40364 --- [         task-2] za.co.ccos.infra.llm.GroqLlamaAdapter    : Groq response received in 2118ms
-2025-12-09T18:07:37.141+02:00  INFO 40364 --- [         task-2] za.co.ccos.app.DocumentationService      : Running documentation agent for consultation ff9d2114-4008-4ddf-9e43-b0a404b54710
-2025-12-09T18:07:37.142+02:00  INFO 40364 --- [         task-2] za.co.ccos.infra.llm.GroqLlamaAdapter    : Sending request to Groq API
-2025-12-09T18:07:43.797+02:00  INFO 40364 --- [         task-2] za.co.ccos.infra.llm.GroqLlamaAdapter    : Groq response received in 6654ms
-2025-12-09T18:07:43.800+02:00  INFO 40364 --- [         task-2] za.co.ccos.app.CoordinationService       : Running coordination agent
-2025-12-09T18:07:43.801+02:00  INFO 40364 --- [         task-2] za.co.ccos.infra.llm.GroqLlamaAdapter    : Sending request to Groq API
-2025-12-09T18:07:46.067+02:00  INFO 40364 --- [         task-2] za.co.ccos.infra.llm.GroqLlamaAdapter    : Groq response received in 2265ms
-2025-12-09T18:07:46.068+02:00  INFO 40364 --- [         task-2] za.co.ccos.app.ComplianceService         : Running compliance agent
-2025-12-09T18:07:46.068+02:00  INFO 40364 --- [         task-2] za.co.ccos.infra.llm.GroqLlamaAdapter    : Sending request to Groq API
-2025-12-09T18:07:47.893+02:00  INFO 40364 --- [         task-2] za.co.ccos.infra.llm.GroqLlamaAdapter    : Groq response received in 1824ms
-2025-12-09T18:07:47.893+02:00  INFO 40364 --- [         task-2] z.co.ccos.app.ConsultationOrchestrator   : Compliance check result: {
-  "issues": [
-    {
-      "type": "INCOMPLETE_VITALS",
-      "detail": "No vitals available for the patient."
-    },
-    {
-      "type": "MEDICATION_DOSE_UNKNOWN",
-      "detail": "Patient is on ARVs with unknown dosage."
-    },
-    {
-      "type": "MISSING_ALLERGY_INFO",
-      "detail": "Patient's allergy to penicillin is noted, but no corresponding caution or alternative is mentioned in the plan."
-    }
-  ],
-  "suggested_edits": [
-    {
-      "field": "objective",
-      "suggestion": "Add vitals to the patient's record."
-    },
-    {
-      "field": "plan",
-      "suggestion": "Investigate and document the patient's ARV dosage and consider potential interactions with other medications."
-    },
-    {
-      "field": "assessment",
-      "suggestion": "Consider the patient's allergy to penicillin when developing the differential diagnoses and plan."
-    }
-  ],
-  "compliance_ok": false
-}
-2025-12-09T18:07:47.900+02:00  INFO 40364 --- [         task-2] z.co.ccos.app.ConsultationOrchestrator   : Consultation ff9d2114-4008-4ddf-9e43-b0a404b54710 processed successfully
+2025-12-09T20:11:35.130+02:00  INFO 93085 --- [         task-2] z.co.ccos.app.ConsultationOrchestrator   : Consultation a12b1346-b49b-47de-8401-f296cdd40633 processed successfully
+2025-12-09T20:11:54.902+02:00  INFO 93085 --- [nio-8080-exec-7] za.co.ccos.web.ConsultationController    : Consultation a12b1346-b49b-47de-8401-f296cdd40633 approved by clinician 550e8400-e29b-41d4-a716-446655440099
+2025-12-09T20:11:54.908+02:00  INFO 93085 --- [nio-8080-exec-7] za.co.ccos.web.ConsultationController    : Simulating FHIR sync for consultation a12b1346-b49b-47de-8401-f296cdd40633
+2025-12-09T20:12:09.509+02:00  INFO 93085 --- [nio-8080-exec-8] za.co.ccos.web.ConsultationController    : Fetching consultation history for patient 550e8400-e29b-41d4-a716-446655440001
+2025-12-09T20:12:20.359+02:00  INFO 93085 --- [io-8080-exec-10] za.co.ccos.web.ConsultationController    : Fetching consultation history for patient 550e8400-e29b-41d4-a716-446655440001
+2025-12-09T20:12:24.349+02:00  INFO 93085 --- [nio-8080-exec-1] za.co.ccos.web.ConsultationController    : Fetching consultation history for patient 550e8400-e29b-41d4-a716-446655440001
