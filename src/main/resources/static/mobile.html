@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <title>Clinical Copilot</title>
-    <link rel="stylesheet" href="mobile.css?v=5">
+    <link rel="stylesheet" href="mobile.css?v=6">
 </head>
 <body>
     <div id="app">
@@ -359,8 +359,24 @@
                     </div>
                 </div>
                 
+                <div class="appointment-section" id="appointmentSection" style="display:none;">
+                    <h3>📅 Next Appointment Recommendation</h3>
+                    <div class="appointment-card" id="appointmentCard">
+                        <div class="spinner-small"></div>
+                        <p>AI analyzing optimal follow-up timing...</p>
+                    </div>
+                </div>
+                
+                <div class="email-section" id="emailSection" style="display:none;">
+                    <h3>📧 Patient Communication</h3>
+                    <div class="email-card" id="emailCard">
+                        <div class="spinner-small"></div>
+                        <p>Generating patient-friendly explanation...</p>
+                    </div>
+                </div>
+                
                 <div class="next-steps" id="nextSteps" style="display:none;">
-                    <h3>✅ Consultation Approved</h3>
+                    <h3>✅ Consultation Complete</h3>
                     <p>What would you like to do next?</p>
                     <div class="next-actions">
                         <button class="action-btn primary" onclick="startConsultation(currentPatient, currentPatientName)">
@@ -403,6 +419,6 @@
         </div>
     </div>
 
-    <script src="mobile.js?v=21"></script>
+    <script src="mobile.js?v=22"></script>
 </body>
 </html>

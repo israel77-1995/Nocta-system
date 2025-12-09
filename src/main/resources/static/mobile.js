@@ -620,6 +620,8 @@ async function approveNote() {
         });
 
         if (!response.ok) throw new Error('Failed to approve consultation');
+        
+        const data = await response.json();
 
         approveBtn.textContent = '✓ Approved!';
         approveBtn.style.background = '#22C55E';
@@ -662,7 +664,21 @@ async function approveNote() {
             
             setTimeout(() => {
                 document.getElementById('approvalSection').style.display = 'none';
-                document.getElementById('nextSteps').style.display = 'block';
+                
+                // Show appointment recommendation
+                document.getElementById('appointmentSection').style.display = 'block';
+                parseAppointmentRecommendation(data.message);
+                
+                // Show email notification
+                setTimeout(() => {
+                    document.getElementById('emailSection').style.display = 'block';
+                    showEmailSent();
+                }, 1000);
+                
+                // Show next steps
+                setTimeout(() => {
+                    document.getElementById('nextSteps').style.display = 'block';
+                }, 2000);
             }, 1000);
         }, 2000);
     } catch (error) {
@@ -823,6 +839,76 @@ function addAnalysisToNotes() {
     
     closeImageModal();
     alert('✓ Image analysis added to consultation notes');
+}
+
+function parseAppointmentRecommendation(message) {
+    const appointmentCard = document.getElementById('appointmentCard');
+    
+    // Extract appointment info from message
+    const timeframeMatch = message.match(/TIMEFRAME:\s*([^\n]+)/);
+    const reasonMatch = message.match(/REASON:\s*([^\n]+)/);
+    const priorityMatch = message.match(/PRIORITY:\s*([^\n]+)/);
+    
+    if (timeframeMatch || reasonMatch) {
+        const timeframe = timeframeMatch ? timeframeMatch[1].trim() : '2 weeks';
+        const reason = reasonMatch ? reasonMatch[1].trim() : 'Follow-up assessment';
+        const priority = priorityMatch ? priorityMatch[1].trim() : 'Routine';
+        
+        const priorityColor = priority.toLowerCase().includes('urgent') ? '#EF4444' : 
+                             priority.toLowerCase().includes('routine') ? '#10B981' : '#6B7280';
+        
+        appointmentCard.innerHTML = `
+            <div class="appointment-details">
+                <div class="appointment-row">
+                    <span class="appointment-label">📅 Recommended Timing:</span>
+                    <span class="appointment-value"><strong>${timeframe}</strong></span>
+                </div>
+                <div class="appointment-row">
+                    <span class="appointment-label">📝 Reason:</span>
+                    <span class="appointment-value">${reason}</span>
+                </div>
+                <div class="appointment-row">
+                    <span class="appointment-label">⚠️ Priority:</span>
+                    <span class="appointment-value" style="color: ${priorityColor}; font-weight: 600;">${priority}</span>
+                </div>
+            </div>
+            <button class="btn-secondary" onclick="scheduleAppointment()" style="margin-top: 12px; width: 100%;">
+                📅 Schedule Appointment
+            </button>
+        `;
+    } else {
+        appointmentCard.innerHTML = `
+            <div class="appointment-details">
+                <p>✅ Follow-up recommended in 2 weeks to assess treatment response.</p>
+            </div>
+        `;
+    }
+}
+
+function showEmailSent() {
+    const emailCard = document.getElementById('emailCard');
+    const patientName = currentPatientName || 'Patient';
+    
+    emailCard.innerHTML = `
+        <div class="email-details">
+            <div class="email-status">
+                <span class="email-icon">✅</span>
+                <div class="email-text">
+                    <strong>Patient Summary Email Sent</strong>
+                    <p>A plain-language explanation of today's visit has been sent to ${patientName}'s email.</p>
+                </div>
+            </div>
+            <div class="email-content-preview">
+                <p style="font-size: 13px; color: #6B7280; font-style: italic;">
+                    📧 Email includes: What we found, what it means, treatment plan, and next steps - all explained in simple terms.
+                </p>
+            </div>
+        </div>
+    `;
+}
+
+function scheduleAppointment() {
+    alert('📅 Appointment scheduling integration coming soon!\n\nFor now, please schedule manually in your calendar system.');
 }
 
 function showSuccessAnimation() {
