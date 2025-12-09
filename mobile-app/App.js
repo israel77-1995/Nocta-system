@@ -35,7 +35,7 @@ export default function App() {
       )}
       <WebView
         ref={webViewRef}
-        source={{ uri: `${API_URL}/mobile.html?v=6` }}
+        source={{ uri: `${API_URL}/mobile.html?v=14` }}
         style={styles.webview}
         javaScriptEnabled={true}
         domStorageEnabled={true}
@@ -48,6 +48,7 @@ export default function App() {
         incognito={true}
         onLoadEnd={() => setError(null)}
         onError={(e) => setError(e.nativeEvent.description)}
+        onMessage={(event) => console.log('WebView:', event.nativeEvent.data)}
         renderLoading={() => (
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color="#4F46E5" />

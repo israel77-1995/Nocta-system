@@ -1,10 +1,14 @@
 za/co/ccos/web/HealthController.class
+za/co/ccos/infra/llm/HttpLlamaAdapter.class
 za/co/ccos/config/SecurityConfig.class
+za/co/ccos/infra/llm/GroqLlamaAdapter.class
 za/co/ccos/web/dto/UploadRequest.class
 za/co/ccos/app/ComplianceService.class
 za/co/ccos/domain/GeneratedNote.class
 za/co/ccos/ClinicalCopilotApplication.class
 za/co/ccos/infra/llm/LlamaResponse.class
+za/co/ccos/infra/llm/HttpLlamaAdapter$RequestPayload.class
+za/co/ccos/domain/VitalSigns$VitalSignsBuilder.class
 za/co/ccos/app/CoordinationService.class
 za/co/ccos/app/ConsultationOrchestrator.class
 za/co/ccos/web/dto/UploadResponse.class
@@ -26,4 +30,5 @@ za/co/ccos/app/DocumentationService.class
 za/co/ccos/domain/Consultation.class
 za/co/ccos/infra/llm/LlamaOptions.class
 za/co/ccos/infra/llm/LlamaAdapter.class
+za/co/ccos/domain/VitalSigns.class
 za/co/ccos/domain/ConsultationState.class

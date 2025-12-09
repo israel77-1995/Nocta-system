@@ -1,6 +1,8 @@
 # Clinical Copilot OS - MVP
 
-A Java-based clinical documentation system using LLAMA for AI-powered SOAP note generation, ICD-10 coding, and care coordination.
+**100% LLAMA-Powered Clinical Documentation System**
+
+A Java-based clinical documentation system using **Meta's LLAMA 3.3 70B** for AI-powered SOAP note generation, ICD-10 coding, and care coordination.
 
 ## Architecture
 
@@ -27,13 +29,37 @@ A Java-based clinical documentation system using LLAMA for AI-powered SOAP note 
 - **Java 17+** - Install from [java.com](https://www.java.com) or use your package manager
 - **Maven 3.6+** - Included with `mvnw` wrapper (no separate install needed)
 
-## Quick Start - 3 Steps
+## Quick Start - 2 Steps
 
-### Step 1: Start LLAMA Server (Required)
+### Step 1: Get Free LLAMA API Access
 
-The system needs a LLAMA language model server running on `localhost:5000`.
+**Get Groq API Key (Free LLAMA 3.3 70B Access):**
+1. Visit https://console.groq.com
+2. Sign up (free, no credit card)
+3. Create API key
+4. Copy key (starts with `gsk_`)
 
-**Option A: Using llama.cpp (Recommended)**
+```bash
+export GROQ_API_KEY='gsk_your_key_here'
+```
+
+### Step 2: Run Application
+
+```bash
+cd /home/wtc/Nocta-system
+mvn clean package -DskipTests
+./run-with-llama-api.sh
+```
+
+The application will start on **http://localhost:8080**
+
+---
+
+## Alternative: Local LLAMA Server
+
+If you prefer running LLAMA locally:
+
+**Option A: Using llama.cpp**
 ```bash
 # Clone llama.cpp
 git clone https://github.com/ggerganov/llama.cpp

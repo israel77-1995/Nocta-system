@@ -10,6 +10,80 @@
 </head>
 <body>
     <div id="app">
+        <!-- Dashboard Screen -->
+        <div id="dashboardScreen" class="screen">
+            <div class="dashboard-header">
+                <div class="logo-small">
+                    <svg width="40" height="40" viewBox="0 0 60 60">
+                        <circle cx="30" cy="30" r="28" fill="#4F46E5" opacity="0.1"/>
+                        <path d="M30 15 L30 45 M15 30 L45 30" stroke="#4F46E5" stroke-width="4" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1>Clinical Copilot</h1>
+                    <p id="clinicianName" class="clinician-name">Dr. Clinician</p>
+                </div>
+                <button class="btn-icon" onclick="logout()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="dashboard-content">
+                <div class="action-prompt">
+                    <h2>👋 Welcome Back!</h2>
+                    <p>Select a patient to begin</p>
+                </div>
+
+                <div class="patient-list" id="dashboardPatientList">
+                    <div class="patient-card-enhanced" onclick="selectPatientFromDashboard('550e8400-e29b-41d4-a716-446655440001', 'John Doe')">
+                        <div class="patient-card-header">
+                            <div class="patient-avatar">JD</div>
+                            <div class="patient-info">
+                                <h3>John Doe</h3>
+                                <p class="patient-meta">Male • 45 years</p>
+                            </div>
+                        </div>
+                        <div class="patient-alerts">
+                            <span class="alert-badge allergy">⚠️ Penicillin</span>
+                            <span class="alert-badge chronic">💊 Hypertension</span>
+                        </div>
+                        <div class="patient-actions">
+                            <button class="action-btn primary" onclick="event.stopPropagation(); startConsultation('550e8400-e29b-41d4-a716-446655440001', 'John Doe')">
+                                ➕ New Visit
+                            </button>
+                            <button class="action-btn secondary" onclick="event.stopPropagation(); viewHistory('550e8400-e29b-41d4-a716-446655440001', 'John Doe')">
+                                📋 History
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="patient-card-enhanced" onclick="selectPatientFromDashboard('550e8400-e29b-41d4-a716-446655440002', 'Jane Smith')">
+                        <div class="patient-card-header">
+                            <div class="patient-avatar">JS</div>
+                            <div class="patient-info">
+                                <h3>Jane Smith</h3>
+                                <p class="patient-meta">Female • 52 years</p>
+                            </div>
+                        </div>
+                        <div class="patient-alerts">
+                            <span class="alert-badge allergy">⚠️ NSAIDs</span>
+                            <span class="alert-badge chronic">💊 Type 2 Diabetes</span>
+                        </div>
+                        <div class="patient-actions">
+                            <button class="action-btn primary" onclick="event.stopPropagation(); startConsultation('550e8400-e29b-41d4-a716-446655440002', 'Jane Smith')">
+                                ➕ New Visit
+                            </button>
+                            <button class="action-btn secondary" onclick="event.stopPropagation(); viewHistory('550e8400-e29b-41d4-a716-446655440002', 'Jane Smith')">
+                                📋 History
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Login Screen -->
         <div id="loginScreen" class="screen active">
             <div class="logo">
@@ -28,6 +102,11 @@
         <!-- Patient Selection -->
         <div id="patientScreen" class="screen">
             <div class="header">
+                <button class="btn-icon" onclick="backToDashboard()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                </button>
                 <h2>Select Patient</h2>
                 <button class="btn-icon" onclick="logout()">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -43,6 +122,9 @@
                         <p>Allergies: Penicillin</p>
                         <p>Chronic: Hypertension</p>
                     </div>
+                    <button class="btn-history" onclick="event.stopPropagation(); viewHistory('550e8400-e29b-41d4-a716-446655440001', 'John Doe')">
+                        📋 History
+                    </button>
                 </div>
                 <div class="patient-card" onclick="selectPatient('550e8400-e29b-41d4-a716-446655440002', 'Jane Smith')">
                     <div class="patient-avatar">JS</div>
@@ -51,6 +133,9 @@
                         <p>Allergies: NSAIDs</p>
                         <p>Chronic: Type 2 Diabetes</p>
                     </div>
+                    <button class="btn-history" onclick="event.stopPropagation(); viewHistory('550e8400-e29b-41d4-a716-446655440002', 'Jane Smith')">
+                        📋 History
+                    </button>
                 </div>
             </div>
         </div>
@@ -58,17 +143,48 @@
         <!-- Consultation Screen -->
         <div id="consultationScreen" class="screen">
             <div class="header">
-                <button class="btn-icon" onclick="backToPatients()">
+                <button class="btn-icon" onclick="backToDashboard()">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M19 12H5M12 19l-7-7 7-7"/>
                     </svg>
                 </button>
                 <h2 id="patientName">Patient</h2>
             </div>
+
+            <div class="patient-context" id="patientContext" style="display:none;">
+                <div class="context-header">
+                    <span class="context-label">Patient Context</span>
+                    <button class="btn-link" onclick="viewHistory(currentPatient, currentPatientName)">View Full History →</button>
+                </div>
+                <div class="context-alerts" id="contextAlerts"></div>
+                <div class="context-last-visit" id="lastVisit"></div>
+            </div>
             
             <div class="consultation-content">
+                <div class="vitals-section">
+                    <h3>Vital Signs</h3>
+                    <div class="vitals-grid">
+                        <div class="vital-input">
+                            <label>BP</label>
+                            <input type="text" id="bp" placeholder="120/80">
+                        </div>
+                        <div class="vital-input">
+                            <label>HR</label>
+                            <input type="number" id="hr" placeholder="78">
+                        </div>
+                        <div class="vital-input">
+                            <label>Temp (°C)</label>
+                            <input type="number" step="0.1" id="temp" placeholder="37.2">
+                        </div>
+                        <div class="vital-input">
+                            <label>O2 (%)</label>
+                            <input type="number" id="o2" placeholder="98">
+                        </div>
+                    </div>
+                </div>
+
                 <div class="record-section">
-                    <button id="recordBtn" class="btn-record" onclick="toggleRecording()">
+                    <button id="recordBtn" class="btn-record" onclick="toggleRecording()" style="touch-action: manipulation;">
                         <svg width="32" height="32" viewBox="0 0 32 32" fill="currentColor">
                             <circle cx="16" cy="16" r="12"/>
                         </svg>
@@ -79,12 +195,32 @@
 
                 <div class="transcript-section">
                     <h3>Consultation Notes</h3>
-                    <textarea id="transcript" placeholder="Type consultation notes here...\n\nExample: Patient reports severe headache for 3 days, throbbing pain, worse with light. Blood pressure 140/90. No visual changes or neck stiffness. Prescribed ibuprofen 400mg."></textarea>
+                    <textarea id="transcript" placeholder="Type consultation notes here...\n\nExample: Patient reports severe headache for 3 days, throbbing pain, worse with light. No visual changes or neck stiffness. Prescribed ibuprofen 400mg."></textarea>
                 </div>
 
                 <button class="btn-primary" onclick="submitConsultation()" id="submitBtn" disabled>
                     Generate SOAP Note
                 </button>
+            </div>
+        </div>
+
+        <!-- Patient History Screen -->
+        <div id="historyScreen" class="screen">
+            <div class="header">
+                <button class="btn-icon" onclick="showScreen('patientScreen')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                </button>
+                <h2 id="historyPatientName">Patient History</h2>
+            </div>
+
+            <div class="history-content">
+                <div id="historyLoading" class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading history...</p>
+                </div>
+                <div id="historyList" style="display:none;"></div>
             </div>
         </div>
 
@@ -133,13 +269,29 @@
                 </div>
 
                 <div class="action-buttons" id="actionButtons" style="display:none;">
-                    <button class="btn-secondary" onclick="backToPatients()">New Consultation</button>
+                    <button class="btn-secondary" onclick="backToDashboard()">Back to Patients</button>
                     <button class="btn-primary" onclick="approveNote()">Approve & Sign</button>
+                </div>
+                
+                <div class="next-steps" id="nextSteps" style="display:none;">
+                    <h3>✅ Consultation Approved</h3>
+                    <p>What would you like to do next?</p>
+                    <div class="next-actions">
+                        <button class="action-btn primary" onclick="startConsultation(currentPatient, currentPatientName)">
+                            ➕ New Visit - Same Patient
+                        </button>
+                        <button class="action-btn secondary" onclick="viewHistory(currentPatient, currentPatientName)">
+                            📋 View Patient History
+                        </button>
+                        <button class="action-btn secondary" onclick="backToDashboard()">
+                            🏠 Back to Dashboard
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="mobile.js?v=7"></script>
+    <script src="mobile.js?v=14"></script>
 </body>
 </html>

@@ -45,6 +45,9 @@ public class Consultation {
     
     private UUID generatedNoteId;
     
+    @Embedded
+    private VitalSigns vitalSigns;
+    
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
     

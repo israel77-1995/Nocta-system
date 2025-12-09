@@ -33,6 +33,7 @@ public class ConsultationController {
         consultation.setClinicianId(request.getClinicianId());
         consultation.setRawTranscript(request.getRawTranscript());
         consultation.setAudioUrl(request.getAudioUrl());
+        consultation.setVitalSigns(request.getVitalSigns());
         consultation.setState(ConsultationState.QUEUED);
         
         Consultation saved = consultationRepository.save(consultation);
@@ -41,6 +42,35 @@ public class ConsultationController {
         orchestrator.processConsultation(saved.getId());
         
         return ResponseEntity.ok(new UploadResponse(saved.getId(), saved.getState()));
+    }
+    
+    @GetMapping("/patient/{patientId}/history")
+    public ResponseEntity<List<ConsultationDetailResponse>> getPatientHistory(@PathVariable UUID patientId) {
+        log.info("Fetching consultation history for patient {}", patientId);
+        
+        List<Consultation> consultations = consultationRepository.findByPatientIdOrderByCreatedAtDesc(patientId);
+        
+        List<ConsultationDetailResponse> responses = consultations.stream()
+                .map(c -> {
+                    ConsultationDetailResponse response = new ConsultationDetailResponse();
+                    response.setId(c.getId());
+                    response.setPatientId(c.getPatientId());
+                    response.setClinicianId(c.getClinicianId());
+                    response.setTimestamp(c.getTimestamp());
+                    response.setRawTranscript(c.getRawTranscript());
+                    response.setState(c.getState());
+                    response.setVitalSigns(c.getVitalSigns());
+                    
+                    if (c.getGeneratedNoteId() != null) {
+                        generatedNoteRepository.findById(c.getGeneratedNoteId())
+                                .ifPresent(response::setGeneratedNote);
+                    }
+                    
+                    return response;
+                })
+                .toList();
+        
+        return ResponseEntity.ok(responses);
     }
     
     @GetMapping("/{id}/status")

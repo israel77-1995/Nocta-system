@@ -2,11 +2,14 @@ spring:
   application:
     name: clinical-copilot
   
+  profiles:
+    active: ${SPRING_PROFILE:dev}
+  
   datasource:
-    url: jdbc:h2:mem:clinicaldb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password: 
+    url: ${DB_URL:jdbc:h2:mem:clinicaldb}
+    driver-class-name: ${DB_DRIVER:org.h2.Driver}
+    username: ${DB_USERNAME:sa}
+    password: ${DB_PASSWORD:} 
   
   h2:
     console:
@@ -29,10 +32,9 @@ server:
   port: 8080
 
 llama:
-  server:
-    url: http://localhost:5000
-  mock:
-    enabled: true
+  provider: api  # Options: mock, api
+  groq:
+    api-key: ${GROQ_API_KEY:your-groq-api-key-here}
 
 logging:
   level:

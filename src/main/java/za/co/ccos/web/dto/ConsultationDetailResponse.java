@@ -3,6 +3,7 @@ package za.co.ccos.web.dto;
 import lombok.Data;
 import za.co.ccos.domain.ConsultationState;
 import za.co.ccos.domain.GeneratedNote;
+import za.co.ccos.domain.VitalSigns;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -14,5 +15,6 @@ public class ConsultationDetailResponse {
     private LocalDateTime timestamp;
     private String rawTranscript;
     private ConsultationState state;
+    private VitalSigns vitalSigns;
     private GeneratedNote generatedNote;
 }

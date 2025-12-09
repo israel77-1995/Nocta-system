@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConditionalOnProperty(name = "llama.mock.enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(name = "llama.provider", havingValue = "mock", matchIfMissing = true)
 @Slf4j
 public class MockLlamaAdapter implements LlamaAdapter {
     

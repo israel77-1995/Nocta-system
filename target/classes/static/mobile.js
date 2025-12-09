@@ -39,42 +39,128 @@ function login() {
     }
     currentClinician = clinicianId;
     console.log('Logged in as clinician:', currentClinician);
-    showScreen('patientScreen');
+    document.getElementById('clinicianName').textContent = 'Clinician: ' + clinicianId.substring(0, 8) + '...';
+    showScreen('dashboardScreen');
+    loadDashboardStats();
 }
 
 function logout() {
     currentClinician = null;
     currentPatient = null;
+    currentPatientName = null;
     showScreen('loginScreen');
 }
 
-function selectPatient(patientId, patientName) {
+function showAllHistory() {
+    showScreen('patientScreen');
+}
+
+async function loadDashboardStats() {
+    // Placeholder for stats - would fetch from API
+    document.getElementById('todayCount').textContent = '-';
+    document.getElementById('pendingCount').textContent = '-';
+}
+
+function selectPatientFromDashboard(patientId, patientName) {
     currentPatient = patientId;
     currentPatientName = patientName;
-    console.log('Selected patient:', currentPatient, currentPatientName);
+    console.log('Selected patient from dashboard:', currentPatient, currentPatientName);
+    // Show options or go directly to consultation
+    startConsultation(patientId, patientName);
+}
+
+function startConsultation(patientId, patientName) {
+    currentPatient = patientId;
+    currentPatientName = patientName;
+    console.log('Starting consultation for:', currentPatient, currentPatientName);
     console.log('Current clinician:', currentClinician);
+    
     document.getElementById('patientName').textContent = patientName;
     document.getElementById('transcript').value = '';
+    document.getElementById('bp').value = '';
+    document.getElementById('hr').value = '';
+    document.getElementById('temp').value = '';
+    document.getElementById('o2').value = '';
     document.getElementById('submitBtn').disabled = true;
+    
+    // Load patient context
+    loadPatientContext(patientId, patientName);
+    
     showScreen('consultationScreen');
+}
+
+async function loadPatientContext(patientId, patientName) {
+    try {
+        const history = await apiCall(`/consultations/patient/${patientId}/history`);
+        
+        const contextEl = document.getElementById('patientContext');
+        const alertsEl = document.getElementById('contextAlerts');
+        const lastVisitEl = document.getElementById('lastVisit');
+        
+        // Show patient alerts
+        const patientData = {
+            '550e8400-e29b-41d4-a716-446655440001': {
+                allergies: 'Penicillin',
+                chronic: 'Hypertension'
+            },
+            '550e8400-e29b-41d4-a716-446655440002': {
+                allergies: 'NSAIDs',
+                chronic: 'Type 2 Diabetes'
+            }
+        };
+        
+        const patient = patientData[patientId];
+        if (patient) {
+            alertsEl.innerHTML = `
+                <span class="alert-badge allergy">⚠️ Allergies: ${patient.allergies}</span>
+                <span class="alert-badge chronic">💊 Chronic: ${patient.chronic}</span>
+            `;
+        }
+        
+        // Show last visit
+        if (history && history.length > 0) {
+            const lastVisit = history[0];
+            const date = new Date(lastVisit.timestamp).toLocaleDateString();
+            const preview = lastVisit.rawTranscript ? lastVisit.rawTranscript.substring(0, 80) + '...' : 'No notes';
+            lastVisitEl.innerHTML = `<strong>Last Visit:</strong> ${date}<br><small>${preview}</small>`;
+        } else {
+            lastVisitEl.innerHTML = '<strong>First Visit</strong> - No previous consultations';
+        }
+        
+        contextEl.style.display = 'block';
+    } catch (error) {
+        console.error('Error loading patient context:', error);
+    }
+}
+
+function selectPatient(patientId, patientName) {
+    startConsultation(patientId, patientName);
 }
 
 function backToPatients() {
     currentPatient = null;
     consultationId = null;
-    showScreen('patientScreen');
+    showScreen('dashboardScreen');
 }
 
 function backToConsultation() {
     showScreen('consultationScreen');
 }
 
+function backToDashboard() {
+    showScreen('dashboardScreen');
+}
+
 function toggleRecording() {
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    console.log('toggleRecording called, isRecording:', isRecording);
     
-    if (isIOS) {
-        document.getElementById('recordStatus').textContent = 'Type your consultation notes below';
-        document.getElementById('transcript').placeholder = 'Patient reports severe headache for 3 days, throbbing pain, worse with light. Blood pressure 140/90. No visual changes or neck stiffness...';
+    // Check if running in iOS WebView (React Native)
+    const isIOSWebView = /(iPhone|iPod|iPad).*AppleWebKit(?!.*Safari)/i.test(navigator.userAgent);
+    
+    if (isIOSWebView) {
+        document.getElementById('recordStatus').textContent = '⚠️ Voice recording not available on iOS. Please type your notes below.';
+        document.getElementById('recordBtn').disabled = true;
+        document.getElementById('recordBtn').style.opacity = '0.5';
         document.getElementById('transcript').focus();
         return;
     }
@@ -87,54 +173,82 @@ function toggleRecording() {
 }
 
 function startRecording() {
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    console.log('startRecording called');
+    console.log('Has webkitSpeechRecognition:', 'webkitSpeechRecognition' in window);
+    console.log('Has SpeechRecognition:', 'SpeechRecognition' in window);
+    
     const hasSpeechRecognition = 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window;
     
-    if (!hasSpeechRecognition || isIOS) {
-        document.getElementById('recordStatus').textContent = 'Speech recognition not available on iOS. Please type your consultation notes below.';
+    if (!hasSpeechRecognition) {
+        console.log('Speech recognition not available');
+        alert('Speech recognition not available on this device. Please type your notes.');
+        document.getElementById('recordStatus').textContent = 'Speech recognition not available. Please type your notes.';
         document.getElementById('transcript').focus();
         return;
     }
 
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    recognition = new SpeechRecognition();
-    recognition.continuous = true;
-    recognition.interimResults = true;
-    recognition.lang = 'en-US';
+    try {
+        console.log('Creating SpeechRecognition instance');
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        recognition = new SpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = 'en-US';
+        
+        console.log('SpeechRecognition configured');
 
-    recognition.onstart = () => {
-        isRecording = true;
-        document.getElementById('recordBtn').classList.add('recording');
-        document.getElementById('recordBtn').querySelector('span').textContent = 'Recording...';
-        document.getElementById('recordStatus').textContent = 'Listening...';
-    };
+        recognition.onstart = () => {
+            console.log('Recording started');
+            isRecording = true;
+            document.getElementById('recordBtn').classList.add('recording');
+            document.getElementById('recordBtn').querySelector('span').textContent = '🔴 Recording...';
+            document.getElementById('recordStatus').textContent = 'Listening... Tap again to stop';
+        };
 
-    recognition.onresult = (event) => {
-        let transcript = '';
-        for (let i = 0; i < event.results.length; i++) {
-            transcript += event.results[i][0].transcript + ' ';
-        }
-        document.getElementById('transcript').value = transcript;
-        document.getElementById('submitBtn').disabled = transcript.trim().length === 0;
-    };
+        recognition.onresult = (event) => {
+            console.log('Got speech result');
+            let transcript = '';
+            for (let i = 0; i < event.results.length; i++) {
+                transcript += event.results[i][0].transcript + ' ';
+            }
+            console.log('Transcript:', transcript.substring(0, 50));
+            document.getElementById('transcript').value = transcript;
+            document.getElementById('submitBtn').disabled = transcript.trim().length === 0;
+        };
 
-    recognition.onerror = (event) => {
-        console.error('Speech recognition error:', event.error);
-        stopRecording();
-        if (event.error === 'not-allowed') {
-            alert('Microphone access denied. Please enable microphone permissions in Settings.');
-        } else {
-            document.getElementById('recordStatus').textContent = 'Recording error. Please type manually.';
-        }
-    };
+        recognition.onerror = (event) => {
+            console.error('Speech recognition error:', event.error);
+            stopRecording();
+            if (event.error === 'not-allowed') {
+                alert('Microphone permission denied. Please enable microphone access in browser settings.');
+                document.getElementById('recordStatus').textContent = 'Microphone access denied. Please type manually.';
+            } else {
+                alert('Recording error: ' + event.error + '. Please type manually.');
+                document.getElementById('recordStatus').textContent = 'Recording error. Please type manually.';
+            }
+        };
 
-    recognition.onend = () => {
-        if (isRecording) {
-            recognition.start();
-        }
-    };
+        recognition.onend = () => {
+            console.log('Recognition ended, isRecording:', isRecording);
+            if (isRecording) {
+                try {
+                    console.log('Restarting recognition');
+                    recognition.start();
+                } catch (e) {
+                    console.error('Failed to restart recognition:', e);
+                    stopRecording();
+                }
+            }
+        };
 
-    recognition.start();
+        console.log('Starting recognition...');
+        recognition.start();
+    } catch (error) {
+        console.error('Failed to start recording:', error);
+        alert('Failed to start recording: ' + error.message);
+        document.getElementById('recordStatus').textContent = 'Recording not available. Please type manually.';
+        document.getElementById('transcript').focus();
+    }
 }
 
 function stopRecording() {
@@ -188,6 +302,14 @@ async function submitConsultation() {
         return;
     }
     
+    // Collect vital signs
+    const vitalSigns = {
+        bloodPressure: document.getElementById('bp').value.trim() || null,
+        heartRate: document.getElementById('hr').value ? parseInt(document.getElementById('hr').value) : null,
+        temperature: document.getElementById('temp').value ? parseFloat(document.getElementById('temp').value) : null,
+        oxygenSaturation: document.getElementById('o2').value ? parseInt(document.getElementById('o2').value) : null
+    };
+    
     showScreen('resultsScreen');
     const loadingEl = document.getElementById('loadingSpinner');
     loadingEl.style.display = 'flex';
@@ -210,7 +332,8 @@ async function submitConsultation() {
         const payload = {
             patientId: currentPatient,
             clinicianId: currentClinician,
-            rawTranscript: transcript
+            rawTranscript: transcript,
+            vitalSigns: vitalSigns
         };
         
         console.log('API Payload:', JSON.stringify(payload));
@@ -356,14 +479,90 @@ async function approveNote() {
         approveBtn.style.background = '#22C55E';
         
         setTimeout(() => {
-            showSuccessAnimation();
-            setTimeout(backToPatients, 1500);
+            document.getElementById('actionButtons').style.display = 'none';
+            document.getElementById('nextSteps').style.display = 'block';
         }, 500);
     } catch (error) {
         console.error('Error:', error);
         alert('Error approving consultation: ' + error.message);
         approveBtn.disabled = false;
         approveBtn.textContent = originalText;
+    }
+}
+
+async function viewHistory(patientId, patientName) {
+    console.log('Viewing history for patient:', patientId, patientName);
+    document.getElementById('historyPatientName').textContent = patientName + ' - History';
+    showScreen('historyScreen');
+    
+    document.getElementById('historyLoading').style.display = 'flex';
+    document.getElementById('historyList').style.display = 'none';
+    
+    try {
+        const data = await apiCall(`/consultations/patient/${patientId}/history`);
+        console.log('History loaded:', data.length, 'consultations');
+        displayHistory(data);
+    } catch (error) {
+        console.error('Error loading history:', error);
+        alert('Error loading patient history: ' + error.message);
+        backToPatients();
+    }
+}
+
+function displayHistory(consultations) {
+    document.getElementById('historyLoading').style.display = 'none';
+    document.getElementById('historyList').style.display = 'block';
+    
+    const listEl = document.getElementById('historyList');
+    listEl.innerHTML = '';
+    
+    if (consultations.length === 0) {
+        listEl.innerHTML = '<p style="text-align: center; color: #6B7280; padding: 40px;">No consultation history found</p>';
+        return;
+    }
+    
+    consultations.forEach(consultation => {
+        const item = document.createElement('div');
+        item.className = 'history-item';
+        
+        const date = new Date(consultation.timestamp).toLocaleString();
+        const status = consultation.state.toLowerCase();
+        
+        let vitalsHtml = '';
+        if (consultation.vitalSigns) {
+            const vs = consultation.vitalSigns;
+            if (vs.bloodPressure) vitalsHtml += `<span class="history-vital"><strong>BP:</strong> ${vs.bloodPressure}</span>`;
+            if (vs.heartRate) vitalsHtml += `<span class="history-vital"><strong>HR:</strong> ${vs.heartRate}</span>`;
+            if (vs.temperature) vitalsHtml += `<span class="history-vital"><strong>Temp:</strong> ${vs.temperature}°C</span>`;
+            if (vs.oxygenSaturation) vitalsHtml += `<span class="history-vital"><strong>O2:</strong> ${vs.oxygenSaturation}%</span>`;
+        }
+        
+        item.innerHTML = `
+            <div class="history-item-header">
+                <span class="history-date">${date}</span>
+                <span class="history-status ${status}">${status}</span>
+            </div>
+            <p style="font-size: 14px; color: #6B7280; margin-top: 8px;">
+                ${consultation.rawTranscript ? consultation.rawTranscript.substring(0, 100) + '...' : 'No transcript'}
+            </p>
+            ${vitalsHtml ? `<div class="history-vitals">${vitalsHtml}</div>` : ''}
+        `;
+        
+        item.onclick = () => viewHistoryDetail(consultation.id);
+        listEl.appendChild(item);
+    });
+}
+
+async function viewHistoryDetail(consultationId) {
+    console.log('Viewing consultation detail:', consultationId);
+    try {
+        const data = await apiCall(`/consultations/${consultationId}`);
+        consultationId = data.id;
+        displayResults(data);
+        showScreen('resultsScreen');
+    } catch (error) {
+        console.error('Error loading consultation:', error);
+        alert('Error loading consultation details: ' + error.message);
     }
 }
 

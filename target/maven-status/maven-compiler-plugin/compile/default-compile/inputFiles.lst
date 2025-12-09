@@ -3,6 +3,8 @@
 /home/wtc/Nocta-system/src/main/java/za/co/ccos/web/ConsultationController.java
 /home/wtc/Nocta-system/src/main/java/za/co/ccos/infra/persistence/ConsultationRepository.java
 /home/wtc/Nocta-system/src/main/java/za/co/ccos/config/AsyncConfig.java
+/home/wtc/Nocta-system/src/main/java/za/co/ccos/infra/llm/GroqLlamaAdapter.java
+/home/wtc/Nocta-system/src/main/java/za/co/ccos/infra/llm/HttpLlamaAdapter.java
 /home/wtc/Nocta-system/src/main/java/za/co/ccos/infra/persistence/PatientRepository.java
 /home/wtc/Nocta-system/src/main/java/za/co/ccos/app/CoordinationService.java
 /home/wtc/Nocta-system/src/main/java/za/co/ccos/domain/Patient.java
@@ -16,6 +18,7 @@
 /home/wtc/Nocta-system/src/main/java/za/co/ccos/app/DocumentationService.java
 /home/wtc/Nocta-system/src/main/java/za/co/ccos/web/dto/StatusResponse.java
 /home/wtc/Nocta-system/src/main/java/za/co/ccos/app/PerceptionService.java
+/home/wtc/Nocta-system/src/main/java/za/co/ccos/domain/VitalSigns.java
 /home/wtc/Nocta-system/src/main/java/za/co/ccos/infra/llm/LlamaResponse.java
 /home/wtc/Nocta-system/src/main/java/za/co/ccos/web/HealthController.java
 /home/wtc/Nocta-system/src/main/java/za/co/ccos/domain/GeneratedNote.java
