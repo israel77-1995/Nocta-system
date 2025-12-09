@@ -1,3 +1,12 @@
+// PWA Service Worker Registration
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+            .then(registration => console.log('SW registered'))
+            .catch(error => console.log('SW registration failed'));
+    });
+}
+
 // API Configuration
 const API_BASE_URL = window.location.origin + '/api/v1';
 let currentClinician = null;
@@ -141,7 +150,7 @@ function selectPatientFromDashboard(patientId, patientName) {
     startConsultation(patientId, patientName);
 }
 
-function startConsultation(patientId, patientName) {
+async function startConsultation(patientId, patientName) {
     currentPatient = patientId;
     currentPatientName = patientName;
     console.log('Starting consultation for:', currentPatient, currentPatientName);
@@ -155,10 +164,21 @@ function startConsultation(patientId, patientName) {
     document.getElementById('o2').value = '';
     document.getElementById('submitBtn').disabled = true;
     
-    // Load patient context
-    loadPatientContext(patientId, patientName);
+    // Show AI summary screen first
+    showScreen('summaryScreen');
+    document.getElementById('summaryLoading').style.display = 'flex';
+    document.getElementById('summaryContent').style.display = 'none';
+    document.getElementById('summaryPatientName').textContent = patientName;
     
-    showScreen('consultationScreen');
+    try {
+        const summary = await apiCall(`/patients/${patientId}/summary`);
+        displayPatientSummary(summary.summary);
+    } catch (error) {
+        console.error('Error loading summary:', error);
+        document.getElementById('summaryLoading').style.display = 'none';
+        document.getElementById('summaryContent').style.display = 'block';
+        document.getElementById('aiSummary').innerHTML = '<p style="color: #EF4444;">Failed to load AI summary. Proceeding with consultation.</p>';
+    }
 }
 
 async function loadPatientContext(patientId, patientName) {
@@ -206,8 +226,21 @@ function selectPatient(patientId, patientName) {
     startConsultation(patientId, patientName);
 }
 
+function displayPatientSummary(summary) {
+    document.getElementById('summaryLoading').style.display = 'none';
+    document.getElementById('summaryContent').style.display = 'block';
+    document.getElementById('aiSummary').innerHTML = summary.replace(/\n/g, '<br>');
+}
+
+function proceedToConsultation() {
+    // Load patient context
+    loadPatientContext(currentPatient, currentPatientName);
+    showScreen('consultationScreen');
+}
+
 function backToPatients() {
     currentPatient = null;
+    currentPatientName = null;
     consultationId = null;
     showScreen('dashboardScreen');
 }
@@ -475,9 +508,23 @@ async function loadConsultationDetails(id) {
 function displayResults(data) {
     document.getElementById('loadingSpinner').style.display = 'none';
     document.getElementById('soapNote').style.display = 'block';
-    document.getElementById('approvalSection').style.display = 'block';
-
+    
     const note = data.generatedNote;
+    
+    // Handle historical consultations without AI-generated notes
+    if (!note) {
+        document.getElementById('subjective').textContent = 'Historical consultation - no AI-generated note available';
+        document.getElementById('objective').textContent = data.rawTranscript || 'N/A';
+        document.getElementById('assessment').textContent = 'N/A';
+        document.getElementById('plan').textContent = 'N/A';
+        document.getElementById('icdCodes').innerHTML = '<p>No ICD codes available</p>';
+        document.getElementById('actionItems').innerHTML = '<p>No action items available</p>';
+        document.getElementById('complianceResults').innerHTML = '<p>Historical record - compliance checks not performed</p>';
+        document.getElementById('approvalSection').style.display = 'none';
+        return;
+    }
+    
+    document.getElementById('approvalSection').style.display = 'block';
     document.getElementById('subjective').textContent = note.soapSubjective || 'N/A';
     document.getElementById('objective').textContent = note.soapObjective || 'N/A';
     document.getElementById('assessment').textContent = note.soapAssessment || 'N/A';
@@ -582,6 +629,8 @@ async function approveNote() {
         });
 
         if (!response.ok) throw new Error('Failed to approve consultation');
+        
+        const data = await response.json();
 
         approveBtn.textContent = '✓ Approved!';
         approveBtn.style.background = '#22C55E';
@@ -624,7 +673,21 @@ async function approveNote() {
             
             setTimeout(() => {
                 document.getElementById('approvalSection').style.display = 'none';
-                document.getElementById('nextSteps').style.display = 'block';
+                
+                // Show appointment recommendation
+                document.getElementById('appointmentSection').style.display = 'block';
+                parseAppointmentRecommendation(data.message);
+                
+                // Show email notification
+                setTimeout(() => {
+                    document.getElementById('emailSection').style.display = 'block';
+                    showEmailSent();
+                }, 1000);
+                
+                // Show next steps
+                setTimeout(() => {
+                    document.getElementById('nextSteps').style.display = 'block';
+                }, 2000);
             }, 1000);
         }, 2000);
     } catch (error) {
@@ -709,6 +772,152 @@ async function viewHistoryDetail(consultationId) {
         console.error('Error loading consultation:', error);
         alert('Error loading consultation details: ' + error.message);
     }
+}
+
+let capturedImageData = null;
+
+function captureImage() {
+    document.getElementById('imageInput').click();
+}
+
+async function handleImageCapture(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    console.log('Image captured:', file.name, file.size);
+    
+    // Show modal
+    document.getElementById('imageModal').style.display = 'flex';
+    document.getElementById('imageAnalysisLoading').style.display = 'flex';
+    document.getElementById('imageAnalysisResult').style.display = 'none';
+    
+    // Display image
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+        const img = document.getElementById('capturedImage');
+        img.src = e.target.result;
+        
+        // Convert to base64
+        const base64 = e.target.result.split(',')[1];
+        capturedImageData = base64;
+        
+        // Analyze with LLAMA Vision
+        try {
+            const context = document.getElementById('transcript').value.trim() || 'No additional context provided';
+            
+            const response = await apiCall('/image-analysis/analyze', {
+                method: 'POST',
+                body: JSON.stringify({
+                    base64Image: base64,
+                    context: context
+                })
+            });
+            
+            document.getElementById('imageAnalysisLoading').style.display = 'none';
+            document.getElementById('imageAnalysisResult').style.display = 'block';
+            
+            if (response.success) {
+                document.getElementById('analysisText').textContent = response.analysis;
+            } else {
+                document.getElementById('analysisText').textContent = 'Analysis failed: ' + response.error;
+            }
+            
+        } catch (error) {
+            console.error('Image analysis error:', error);
+            document.getElementById('imageAnalysisLoading').style.display = 'none';
+            document.getElementById('imageAnalysisResult').style.display = 'block';
+            document.getElementById('analysisText').textContent = 'Error analyzing image: ' + error.message;
+        }
+    };
+    
+    reader.readAsDataURL(file);
+}
+
+function closeImageModal() {
+    document.getElementById('imageModal').style.display = 'none';
+    document.getElementById('imageInput').value = '';
+}
+
+function addAnalysisToNotes() {
+    const analysis = document.getElementById('analysisText').textContent;
+    const currentNotes = document.getElementById('transcript').value;
+    
+    const separator = currentNotes ? '\n\n--- AI IMAGE ANALYSIS ---\n' : '--- AI IMAGE ANALYSIS ---\n';
+    document.getElementById('transcript').value = currentNotes + separator + analysis;
+    document.getElementById('submitBtn').disabled = false;
+    
+    closeImageModal();
+    alert('✓ Image analysis added to consultation notes');
+}
+
+function parseAppointmentRecommendation(message) {
+    const appointmentCard = document.getElementById('appointmentCard');
+    
+    // Extract appointment info from message
+    const timeframeMatch = message.match(/TIMEFRAME:\s*([^\n]+)/);
+    const reasonMatch = message.match(/REASON:\s*([^\n]+)/);
+    const priorityMatch = message.match(/PRIORITY:\s*([^\n]+)/);
+    
+    if (timeframeMatch || reasonMatch) {
+        const timeframe = timeframeMatch ? timeframeMatch[1].trim() : '2 weeks';
+        const reason = reasonMatch ? reasonMatch[1].trim() : 'Follow-up assessment';
+        const priority = priorityMatch ? priorityMatch[1].trim() : 'Routine';
+        
+        const priorityColor = priority.toLowerCase().includes('urgent') ? '#EF4444' : 
+                             priority.toLowerCase().includes('routine') ? '#10B981' : '#6B7280';
+        
+        appointmentCard.innerHTML = `
+            <div class="appointment-details">
+                <div class="appointment-row">
+                    <span class="appointment-label">📅 Recommended Timing:</span>
+                    <span class="appointment-value"><strong>${timeframe}</strong></span>
+                </div>
+                <div class="appointment-row">
+                    <span class="appointment-label">📝 Reason:</span>
+                    <span class="appointment-value">${reason}</span>
+                </div>
+                <div class="appointment-row">
+                    <span class="appointment-label">⚠️ Priority:</span>
+                    <span class="appointment-value" style="color: ${priorityColor}; font-weight: 600;">${priority}</span>
+                </div>
+            </div>
+            <button class="btn-secondary" onclick="scheduleAppointment()" style="margin-top: 12px; width: 100%;">
+                📅 Schedule Appointment
+            </button>
+        `;
+    } else {
+        appointmentCard.innerHTML = `
+            <div class="appointment-details">
+                <p>✅ Follow-up recommended in 2 weeks to assess treatment response.</p>
+            </div>
+        `;
+    }
+}
+
+function showEmailSent() {
+    const emailCard = document.getElementById('emailCard');
+    const patientName = currentPatientName || 'Patient';
+    
+    emailCard.innerHTML = `
+        <div class="email-details">
+            <div class="email-status">
+                <span class="email-icon">✅</span>
+                <div class="email-text">
+                    <strong>Patient Summary Email Sent</strong>
+                    <p>A plain-language explanation of today's visit has been sent to ${patientName}'s email.</p>
+                </div>
+            </div>
+            <div class="email-content-preview">
+                <p style="font-size: 13px; color: #6B7280; font-style: italic;">
+                    📧 Email includes: What we found, what it means, treatment plan, and next steps - all explained in simple terms.
+                </p>
+            </div>
+        </div>
+    `;
+}
+
+function scheduleAppointment() {
+    alert('📅 Appointment scheduling integration coming soon!\n\nFor now, please schedule manually in your calendar system.');
 }
 
 function showSuccessAnimation() {

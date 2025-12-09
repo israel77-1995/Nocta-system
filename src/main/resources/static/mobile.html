@@ -6,7 +6,11 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <title>Clinical Copilot</title>
-    <link rel="stylesheet" href="mobile.css?v=3">
+    <link rel="stylesheet" href="mobile.css?v=7">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4F46E5">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
 </head>
 <body>
     <div id="app">
@@ -99,6 +103,44 @@
             <button class="btn-primary" onclick="login()">Start Session</button>
         </div>
 
+        <!-- AI Patient Summary Screen -->
+        <div id="summaryScreen" class="screen">
+            <div class="header">
+                <button class="btn-icon" onclick="backToPatients()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                </button>
+                <h2 id="summaryPatientName">Patient Summary</h2>
+            </div>
+
+            <div class="summary-content">
+                <div id="summaryLoading" class="loading">
+                    <div class="spinner"></div>
+                    <p style="font-weight: 600; color: #4F46E5;">🤖 AI Analyzing Patient History...</p>
+                    <p style="font-size: 14px; color: #6B7280; margin-top: 8px;">Reviewing medical records, identifying key trends, and preparing clinical insights</p>
+                </div>
+
+                <div id="summaryContent" style="display:none;">
+                    <div class="ai-summary-card">
+                        <div class="summary-header">
+                            <span class="ai-badge">🤖 AI-Generated Clinical Summary</span>
+                        </div>
+                        <div id="aiSummary" class="summary-text"></div>
+                    </div>
+
+                    <div class="summary-actions">
+                        <button class="btn-primary" onclick="proceedToConsultation()">
+                            ✓ Ready - Start Consultation
+                        </button>
+                        <button class="btn-secondary" onclick="viewHistory(currentPatient, currentPatientName)">
+                            📋 View Full History
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Patient Selection -->
         <div id="patientScreen" class="screen">
             <div class="header">
@@ -184,13 +226,24 @@
                 </div>
 
                 <div class="record-section">
-                    <button id="recordBtn" class="btn-record" onclick="toggleRecording()" style="touch-action: manipulation;">
-                        <svg width="32" height="32" viewBox="0 0 32 32" fill="currentColor">
-                            <circle cx="16" cy="16" r="12"/>
-                        </svg>
-                        <span>Tap to Record</span>
-                    </button>
-                    <p id="recordStatus" class="record-status">Tap button to record or type below</p>
+                    <div class="capture-buttons">
+                        <button id="recordBtn" class="btn-record" onclick="toggleRecording()" style="touch-action: manipulation;">
+                            <svg width="32" height="32" viewBox="0 0 32 32" fill="currentColor">
+                                <circle cx="16" cy="16" r="12"/>
+                            </svg>
+                            <span>Record</span>
+                        </button>
+                        <button id="cameraBtn" class="btn-camera" onclick="captureImage()" style="touch-action: manipulation;">
+                            <svg width="32" height="32" viewBox="0 0 32 32" fill="currentColor">
+                                <rect x="6" y="10" width="20" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+                                <circle cx="16" cy="18" r="4"/>
+                                <path d="M12 10 L14 6 L18 6 L20 10"/>
+                            </svg>
+                            <span>📸 Photo</span>
+                        </button>
+                    </div>
+                    <p id="recordStatus" class="record-status">Record audio or capture image</p>
+                    <input type="file" id="imageInput" accept="image/*" capture="environment" style="display:none" onchange="handleImageCapture(event)">
                 </div>
 
                 <div class="transcript-section">
@@ -310,8 +363,24 @@
                     </div>
                 </div>
                 
+                <div class="appointment-section" id="appointmentSection" style="display:none;">
+                    <h3>📅 Next Appointment Recommendation</h3>
+                    <div class="appointment-card" id="appointmentCard">
+                        <div class="spinner-small"></div>
+                        <p>AI analyzing optimal follow-up timing...</p>
+                    </div>
+                </div>
+                
+                <div class="email-section" id="emailSection" style="display:none;">
+                    <h3>📧 Patient Communication</h3>
+                    <div class="email-card" id="emailCard">
+                        <div class="spinner-small"></div>
+                        <p>Generating patient-friendly explanation...</p>
+                    </div>
+                </div>
+                
                 <div class="next-steps" id="nextSteps" style="display:none;">
-                    <h3>✅ Consultation Approved</h3>
+                    <h3>✅ Consultation Complete</h3>
                     <p>What would you like to do next?</p>
                     <div class="next-actions">
                         <button class="action-btn primary" onclick="startConsultation(currentPatient, currentPatientName)">
@@ -329,6 +398,31 @@
         </div>
     </div>
 
-    <script src="mobile.js?v=18"></script>
+    <!-- Image Analysis Modal -->
+    <div id="imageModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📸 AI Image Analysis</h3>
+                <button class="btn-close" onclick="closeImageModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <img id="capturedImage" style="width:100%; border-radius:8px; margin-bottom:16px;">
+                <div id="imageAnalysisLoading" class="loading" style="display:none;">
+                    <div class="spinner"></div>
+                    <p>🤖 LLAMA Vision analyzing image...</p>
+                </div>
+                <div id="imageAnalysisResult" style="display:none;">
+                    <div class="analysis-card">
+                        <pre id="analysisText" style="white-space: pre-wrap; font-family: inherit; font-size: 14px; line-height: 1.6;"></pre>
+                    </div>
+                    <button class="btn-primary" onclick="addAnalysisToNotes()" style="margin-top:12px;">
+                        ✓ Add to Consultation Notes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="mobile.js?v=22"></script>
 </body>
 </html>

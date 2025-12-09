@@ -2,7 +2,7 @@
 
 Welcome to the Clinical Copilot OS documentation. This guide helps you find the right documentation for your needs.
 
-##  Getting Started (Start Here!)
+## 🚀 Getting Started (Start Here!)
 
 ### [QUICK_START.md](QUICK_START.md)
 **For those who want to run the system quickly (10 minutes)**
@@ -18,7 +18,7 @@ Welcome to the Clinical Copilot OS documentation. This guide helps you find the 
 - API testing examples
 - Performance tuning tips
 
-##  Main Documentation
+## 📚 Main Documentation
 
 ### [README.md](README.md)
 **Complete system documentation**

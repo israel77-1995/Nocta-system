@@ -4,9 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import za.co.ccos.app.PatientSummaryService;
 import za.co.ccos.domain.Patient;
 import za.co.ccos.infra.persistence.PatientRepository;
 import za.co.ccos.web.dto.PatientResponse;
+import za.co.ccos.web.dto.PatientSummaryResponse;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,6 +20,7 @@ import java.util.UUID;
 public class PatientController {
     
     private final PatientRepository patientRepository;
+    private final PatientSummaryService summaryService;
     
     @GetMapping
     public ResponseEntity<List<PatientResponse>> getAllPatients() {
@@ -57,5 +60,14 @@ public class PatientController {
                 .build();
         
         return ResponseEntity.ok(response);
+    }
+    
+    @GetMapping("/{id}/summary")
+    public ResponseEntity<PatientSummaryResponse> getPatientSummary(@PathVariable UUID id) {
+        log.info("Generating AI summary for patient {}", id);
+        
+        String summary = summaryService.generatePatientSummary(id);
+        
+        return ResponseEntity.ok(new PatientSummaryResponse(id, summary));
     }
 }

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate App Icons</title>
+</head>
+<body>
+    <h2>Generate Clinical Copilot Icons</h2>
+    <canvas id="canvas192" width="192" height="192"></canvas>
+    <canvas id="canvas512" width="512" height="512"></canvas>
+    
+    <script>
+        function createIcon(canvasId, size) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            
+            // Background gradient
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, '#4F46E5');
+            gradient.addColorStop(1, '#7C3AED');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, size, size);
+            
+            // Medical cross
+            ctx.fillStyle = 'white';
+            const crossSize = size * 0.6;
+            const crossThickness = size * 0.1;
+            const centerX = size / 2;
+            const centerY = size / 2;
+            
+            // Horizontal bar
+            ctx.fillRect(centerX - crossSize/2, centerY - crossThickness/2, crossSize, crossThickness);
+            // Vertical bar  
+            ctx.fillRect(centerX - crossThickness/2, centerY - crossSize/2, crossThickness, crossSize);
+            
+            // AI circuit pattern
+            ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            for(let i = 0; i < 8; i++) {
+                const angle = (i * Math.PI * 2) / 8;
+                const x = centerX + Math.cos(angle) * (size * 0.35);
+                const y = centerY + Math.sin(angle) * (size * 0.35);
+                ctx.moveTo(centerX, centerY);
+                ctx.lineTo(x, y);
+                ctx.arc(x, y, 4, 0, Math.PI * 2);
+            }
+            ctx.stroke();
+        }
+        
+        createIcon('canvas192', 192);
+        createIcon('canvas512', 512);
+        
+        // Download links
+        setTimeout(() => {
+            ['canvas192', 'canvas512'].forEach(id => {
+                const canvas = document.getElementById(id);
+                const link = document.createElement('a');
+                link.download = `icon-${id.replace('canvas', '')}.png`;
+                link.href = canvas.toDataURL();
+                link.textContent = `Download ${id.replace('canvas', '')}x${id.replace('canvas', '')} icon`;
+                link.style.display = 'block';
+                link.style.margin = '10px 0';
+                document.body.appendChild(link);
+            });
+        }, 100);
+    </script>
+</body>
+</html>

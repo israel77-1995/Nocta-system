@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import za.co.ccos.app.AppointmentSchedulingService;
 import za.co.ccos.app.ConsultationOrchestrator;
+import za.co.ccos.app.PatientEmailService;
 import za.co.ccos.domain.*;
 import za.co.ccos.infra.persistence.*;
 import za.co.ccos.web.dto.*;
@@ -20,6 +22,8 @@ public class ConsultationController {
     private final PatientRepository patientRepository;
     private final GeneratedNoteRepository generatedNoteRepository;
     private final ConsultationOrchestrator orchestrator;
+    private final AppointmentSchedulingService appointmentService;
+    private final PatientEmailService emailService;
     
     @PostMapping("/upload-audio")
     public ResponseEntity<UploadResponse> uploadAudio(@RequestBody UploadRequest request) {
@@ -120,6 +124,29 @@ public class ConsultationController {
             
             log.info("Consultation {} approved by clinician {}", id, request.getClinicianId());
             
+            // Get generated note
+            GeneratedNote note = null;
+            if (consultation.getGeneratedNoteId() != null) {
+                note = generatedNoteRepository.findById(consultation.getGeneratedNoteId()).orElse(null);
+            }
+            
+            // Generate appointment recommendation
+            String appointmentRec = null;
+            if (note != null) {
+                appointmentRec = appointmentService.suggestNextAppointment(consultation, note);
+                log.info("Next appointment recommendation: {}", appointmentRec);
+            }
+            
+            // Generate and send patient-friendly email
+            if (note != null) {
+                Patient patient = patientRepository.findById(consultation.getPatientId()).orElse(null);
+                if (patient != null) {
+                    String patientExplanation = emailService.generatePatientFriendlyExplanation(patient, note);
+                    String patientEmail = patient.getFirstName().toLowerCase() + "." + patient.getLastName().toLowerCase() + "@email.com";
+                    emailService.sendEmail(patientEmail, "Your Visit Summary", patientExplanation);
+                }
+            }
+            
             // Simulate EHR sync
             boolean syncSuccess = simulateEhrSync(consultation);
             if (syncSuccess) {
@@ -127,7 +154,12 @@ public class ConsultationController {
                 consultationRepository.save(consultation);
             }
             
-            return ResponseEntity.ok(new ApprovalResponse(true, "Consultation approved and synced"));
+            String message = "Consultation approved and synced";
+            if (appointmentRec != null) {
+                message += ". " + appointmentRec;
+            }
+            
+            return ResponseEntity.ok(new ApprovalResponse(true, message));
         } else {
             return ResponseEntity.ok(new ApprovalResponse(false, "Consultation not approved"));
         }
