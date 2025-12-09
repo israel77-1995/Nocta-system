@@ -63,10 +63,29 @@ public class GroqLlamaAdapter implements LlamaAdapter {
             }
             
             JsonNode root = objectMapper.readTree(response.body());
-            String content = root.path("choices").get(0).path("message").path("content").asText();
+            JsonNode choice = root.path("choices").get(0);
+            JsonNode usage = root.path("usage");
             
-            log.info("Groq response received in {}ms", processingTime);
-            return new LlamaResponse(content, (int) processingTime);
+            String content = choice.path("message").path("content").asText();
+            String finishReason = choice.path("finish_reason").asText();
+            String model = root.path("model").asText();
+            
+            Integer promptTokens = usage.path("prompt_tokens").asInt();
+            Integer completionTokens = usage.path("completion_tokens").asInt();
+            Integer totalTokens = usage.path("total_tokens").asInt();
+            
+            log.info("Groq response: {}ms, {} tokens (prompt: {}, completion: {})", 
+                    processingTime, totalTokens, promptTokens, completionTokens);
+            
+            return LlamaResponse.builder()
+                    .content(content)
+                    .processingTime((int) processingTime)
+                    .promptTokens(promptTokens)
+                    .completionTokens(completionTokens)
+                    .totalTokens(totalTokens)
+                    .model(model)
+                    .finishReason(finishReason)
+                    .build();
             
         } catch (Exception e) {
             log.error("Failed to communicate with Groq API", e);
