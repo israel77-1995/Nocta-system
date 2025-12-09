@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <title>Clinical Copilot</title>
-    <link rel="stylesheet" href="mobile.css?v=3">
+    <link rel="stylesheet" href="mobile.css?v=4">
 </head>
 <body>
     <div id="app">
@@ -97,6 +97,44 @@
                 <input type="text" id="clinicianId" placeholder="Clinician ID" value="550e8400-e29b-41d4-a716-446655440099">
             </div>
             <button class="btn-primary" onclick="login()">Start Session</button>
+        </div>
+
+        <!-- AI Patient Summary Screen -->
+        <div id="summaryScreen" class="screen">
+            <div class="header">
+                <button class="btn-icon" onclick="backToPatients()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                </button>
+                <h2 id="summaryPatientName">Patient Summary</h2>
+            </div>
+
+            <div class="summary-content">
+                <div id="summaryLoading" class="loading">
+                    <div class="spinner"></div>
+                    <p style="font-weight: 600; color: #4F46E5;">🤖 AI Analyzing Patient History...</p>
+                    <p style="font-size: 14px; color: #6B7280; margin-top: 8px;">Reviewing medical records, identifying key trends, and preparing clinical insights</p>
+                </div>
+
+                <div id="summaryContent" style="display:none;">
+                    <div class="ai-summary-card">
+                        <div class="summary-header">
+                            <span class="ai-badge">🤖 AI-Generated Clinical Summary</span>
+                        </div>
+                        <div id="aiSummary" class="summary-text"></div>
+                    </div>
+
+                    <div class="summary-actions">
+                        <button class="btn-primary" onclick="proceedToConsultation()">
+                            ✓ Ready - Start Consultation
+                        </button>
+                        <button class="btn-secondary" onclick="viewHistory(currentPatient, currentPatientName)">
+                            📋 View Full History
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Patient Selection -->
@@ -329,6 +367,6 @@
         </div>
     </div>
 
-    <script src="mobile.js?v=18"></script>
+    <script src="mobile.js?v=19"></script>
 </body>
 </html>

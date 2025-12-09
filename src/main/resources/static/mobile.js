@@ -141,7 +141,7 @@ function selectPatientFromDashboard(patientId, patientName) {
     startConsultation(patientId, patientName);
 }
 
-function startConsultation(patientId, patientName) {
+async function startConsultation(patientId, patientName) {
     currentPatient = patientId;
     currentPatientName = patientName;
     console.log('Starting consultation for:', currentPatient, currentPatientName);
@@ -155,10 +155,21 @@ function startConsultation(patientId, patientName) {
     document.getElementById('o2').value = '';
     document.getElementById('submitBtn').disabled = true;
     
-    // Load patient context
-    loadPatientContext(patientId, patientName);
+    // Show AI summary screen first
+    showScreen('summaryScreen');
+    document.getElementById('summaryLoading').style.display = 'flex';
+    document.getElementById('summaryContent').style.display = 'none';
+    document.getElementById('summaryPatientName').textContent = patientName;
     
-    showScreen('consultationScreen');
+    try {
+        const summary = await apiCall(`/patients/${patientId}/summary`);
+        displayPatientSummary(summary.summary);
+    } catch (error) {
+        console.error('Error loading summary:', error);
+        document.getElementById('summaryLoading').style.display = 'none';
+        document.getElementById('summaryContent').style.display = 'block';
+        document.getElementById('aiSummary').innerHTML = '<p style="color: #EF4444;">Failed to load AI summary. Proceeding with consultation.</p>';
+    }
 }
 
 async function loadPatientContext(patientId, patientName) {
@@ -206,8 +217,21 @@ function selectPatient(patientId, patientName) {
     startConsultation(patientId, patientName);
 }
 
+function displayPatientSummary(summary) {
+    document.getElementById('summaryLoading').style.display = 'none';
+    document.getElementById('summaryContent').style.display = 'block';
+    document.getElementById('aiSummary').innerHTML = summary.replace(/\n/g, '<br>');
+}
+
+function proceedToConsultation() {
+    // Load patient context
+    loadPatientContext(currentPatient, currentPatientName);
+    showScreen('consultationScreen');
+}
+
 function backToPatients() {
     currentPatient = null;
+    currentPatientName = null;
     consultationId = null;
     showScreen('dashboardScreen');
 }
