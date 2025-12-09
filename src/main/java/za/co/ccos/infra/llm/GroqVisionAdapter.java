@@ -32,7 +32,7 @@ public class GroqVisionAdapter {
     public String analyzeImage(String base64Image, String prompt) throws LlamaException {
         try {
             String requestBody = objectMapper.writeValueAsString(Map.of(
-                "model", "llama-3.2-90b-vision-preview",
+                "model", "meta-llama/llama-3.2-11b-vision-instruct:free",
                 "messages", new Object[]{
                     Map.of(
                         "role", "user",
@@ -50,33 +50,35 @@ public class GroqVisionAdapter {
             ));
             
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("https://api.groq.com/openai/v1/chat/completions"))
+                    .uri(URI.create("https://openrouter.ai/api/v1/chat/completions"))
                     .header("Content-Type", "application/json")
                     .header("Authorization", "Bearer " + apiKey)
+                    .header("HTTP-Referer", "https://clinical-copilot.app")
+                    .header("X-Title", "Clinical Copilot")
                     .timeout(Duration.ofSeconds(60))
                     .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                     .build();
             
-            log.info("Sending image to Groq Vision API");
+            log.info("Sending image to OpenRouter Vision API (Llama 3.2 11B Vision)");
             long startTime = System.currentTimeMillis();
             
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             long processingTime = System.currentTimeMillis() - startTime;
             
             if (response.statusCode() != 200) {
-                log.error("Groq Vision API error: {}", response.body());
-                throw new LlamaException("Groq Vision API returned status: " + response.statusCode());
+                log.error("OpenRouter Vision API error: {}", response.body());
+                throw new LlamaException("OpenRouter Vision API returned status: " + response.statusCode());
             }
             
             JsonNode root = objectMapper.readTree(response.body());
             String content = root.path("choices").get(0).path("message").path("content").asText();
             
-            log.info("Groq Vision response received in {}ms", processingTime);
+            log.info("OpenRouter Vision response received in {}ms", processingTime);
             return content;
             
         } catch (Exception e) {
-            log.error("Failed to communicate with Groq Vision API", e);
-            throw new LlamaException("Groq Vision API error: " + e.getMessage(), e);
+            log.error("Failed to communicate with OpenRouter Vision API", e);
+            throw new LlamaException("OpenRouter Vision API error: " + e.getMessage(), e);
         }
     }
 }

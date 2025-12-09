@@ -8,31 +8,31 @@ nohup: ignoring input
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::                (v3.1.5)
 
-2025-12-09T22:07:28.952+02:00  INFO 33128 --- [           main] za.co.ccos.ClinicalCopilotApplication    : Starting ClinicalCopilotApplication v1.0.0 using Java 21.0.8 with PID 33128 (/home/wtc/Nocta-system/target/clinical-copilot-1.0.0.jar started by wtc in /home/wtc/Nocta-system)
-2025-12-09T22:07:28.957+02:00  INFO 33128 --- [           main] za.co.ccos.ClinicalCopilotApplication    : The following 1 profile is active: "dev"
-2025-12-09T22:07:31.650+02:00  INFO 33128 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2025-12-09T22:07:31.650+02:00  INFO 33128 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
-2025-12-09T22:07:31.755+02:00  INFO 33128 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2025-12-09T22:07:32.195+02:00  INFO 33128 --- [           main] o.f.c.internal.license.VersionPrinter    : Flyway Community Edition 9.16.3 by Redgate
-2025-12-09T22:07:32.195+02:00  INFO 33128 --- [           main] o.f.c.internal.license.VersionPrinter    : See release notes here: https://rd.gt/416ObMi
-2025-12-09T22:07:32.197+02:00  INFO 33128 --- [           main] o.f.c.internal.license.VersionPrinter    : 
-2025-12-09T22:07:32.214+02:00  INFO 33128 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2025-12-09T22:07:32.434+02:00  INFO 33128 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:clinicaldb user=SA
-2025-12-09T22:07:32.437+02:00  INFO 33128 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2025-12-09T22:07:32.449+02:00  INFO 33128 --- [           main] o.f.c.i.database.base.BaseDatabaseType   : Database: jdbc:h2:mem:clinicaldb (H2 2.1)
-2025-12-09T22:07:32.544+02:00  INFO 33128 --- [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table "PUBLIC"."flyway_schema_history" does not exist yet
-2025-12-09T22:07:32.551+02:00  INFO 33128 --- [           main] o.f.core.internal.command.DbValidate     : Successfully validated 4 migrations (execution time 00:00.031s)
-2025-12-09T22:07:32.565+02:00  INFO 33128 --- [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table "PUBLIC"."flyway_schema_history" ...
-2025-12-09T22:07:32.615+02:00  INFO 33128 --- [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "PUBLIC": << Empty Schema >>
-2025-12-09T22:07:32.632+02:00  INFO 33128 --- [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "PUBLIC" to version "1 - initial schema"
-2025-12-09T22:07:32.682+02:00  INFO 33128 --- [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "PUBLIC" to version "2 - sample data"
-2025-12-09T22:07:32.705+02:00  INFO 33128 --- [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "PUBLIC" to version "3 - add vital signs"
-2025-12-09T22:07:32.759+02:00  INFO 33128 --- [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "PUBLIC" to version "4 - patient consultation history"
-2025-12-09T22:07:32.773+02:00  INFO 33128 --- [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 4 migrations to schema "PUBLIC", now at version v4 (execution time 00:00.162s)
-2025-12-09T22:07:32.961+02:00  INFO 33128 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2025-12-09T22:07:33.038+02:00  INFO 33128 --- [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.2.13.Final
-2025-12-09T22:07:33.042+02:00  INFO 33128 --- [           main] org.hibernate.cfg.Environment            : HHH000406: Using bytecode reflection optimizer
-2025-12-09T22:07:34.647+02:00  INFO 33128 --- [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2025-12-09T22:07:35.434+02:00  WARN 33128 --- [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2025-12-09T22:07:36.213+02:00  INFO 33128 --- [           main] za.co.ccos.ClinicalCopilotApplication    : Started ClinicalCopilotApplication in 7.882 seconds (process running for 8.5)
-2025-12-09T22:07:51.459+02:00  INFO 33128 --- [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-12-09T22:15:18.959+02:00  INFO 36726 --- [           main] za.co.ccos.ClinicalCopilotApplication    : Starting ClinicalCopilotApplication v1.0.0 using Java 21.0.8 with PID 36726 (/home/wtc/Nocta-system/target/clinical-copilot-1.0.0.jar started by wtc in /home/wtc/Nocta-system)
+2025-12-09T22:15:18.962+02:00  INFO 36726 --- [           main] za.co.ccos.ClinicalCopilotApplication    : The following 1 profile is active: "dev"
+2025-12-09T22:15:21.536+02:00  INFO 36726 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-12-09T22:15:21.537+02:00  INFO 36726 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2025-12-09T22:15:21.624+02:00  INFO 36726 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-12-09T22:15:22.008+02:00  INFO 36726 --- [           main] o.f.c.internal.license.VersionPrinter    : Flyway Community Edition 9.16.3 by Redgate
+2025-12-09T22:15:22.008+02:00  INFO 36726 --- [           main] o.f.c.internal.license.VersionPrinter    : See release notes here: https://rd.gt/416ObMi
+2025-12-09T22:15:22.009+02:00  INFO 36726 --- [           main] o.f.c.internal.license.VersionPrinter    : 
+2025-12-09T22:15:22.023+02:00  INFO 36726 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-12-09T22:15:22.239+02:00  INFO 36726 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:clinicaldb user=SA
+2025-12-09T22:15:22.241+02:00  INFO 36726 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-12-09T22:15:22.253+02:00  INFO 36726 --- [           main] o.f.c.i.database.base.BaseDatabaseType   : Database: jdbc:h2:mem:clinicaldb (H2 2.1)
+2025-12-09T22:15:22.321+02:00  INFO 36726 --- [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table "PUBLIC"."flyway_schema_history" does not exist yet
+2025-12-09T22:15:22.326+02:00  INFO 36726 --- [           main] o.f.core.internal.command.DbValidate     : Successfully validated 4 migrations (execution time 00:00.018s)
+2025-12-09T22:15:22.334+02:00  INFO 36726 --- [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table "PUBLIC"."flyway_schema_history" ...
+2025-12-09T22:15:22.362+02:00  INFO 36726 --- [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "PUBLIC": << Empty Schema >>
+2025-12-09T22:15:22.374+02:00  INFO 36726 --- [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "PUBLIC" to version "1 - initial schema"
+2025-12-09T22:15:22.403+02:00  INFO 36726 --- [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "PUBLIC" to version "2 - sample data"
+2025-12-09T22:15:22.419+02:00  INFO 36726 --- [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "PUBLIC" to version "3 - add vital signs"
+2025-12-09T22:15:22.465+02:00  INFO 36726 --- [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "PUBLIC" to version "4 - patient consultation history"
+2025-12-09T22:15:22.482+02:00  INFO 36726 --- [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 4 migrations to schema "PUBLIC", now at version v4 (execution time 00:00.123s)
+2025-12-09T22:15:22.592+02:00  INFO 36726 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-12-09T22:15:22.649+02:00  INFO 36726 --- [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.2.13.Final
+2025-12-09T22:15:22.652+02:00  INFO 36726 --- [           main] org.hibernate.cfg.Environment            : HHH000406: Using bytecode reflection optimizer
+2025-12-09T22:15:23.915+02:00  INFO 36726 --- [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-12-09T22:15:24.744+02:00  WARN 36726 --- [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-12-09T22:15:25.494+02:00  INFO 36726 --- [           main] za.co.ccos.ClinicalCopilotApplication    : Started ClinicalCopilotApplication in 7.091 seconds (process running for 7.719)
+2025-12-09T22:15:31.091+02:00  INFO 36726 --- [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
