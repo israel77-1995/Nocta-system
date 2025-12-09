@@ -1,35 +1,50 @@
 version: '3.8'
 
 services:
-  backend:
+  # Clinical Copilot Application
+  app:
     build:
       context: ..
-      dockerfile: docker/Dockerfile.backend
+      dockerfile: Dockerfile
+    container_name: clinical-copilot
     ports:
       - "8080:8080"
     environment:
-      - SPRING_PROFILES_ACTIVE=dev
-      - LLAMA_SERVER_URL=http://llama-server:5000
+      SPRING_DATASOURCE_URL: jdbc:h2:mem:clinicaldb
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      LLAMA_SERVER_URL: http://llama-server:5000
     depends_on:
       - llama-server
     networks:
-      - clinical-network
+      - nocta-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
+  # LLAMA Server (Optional - for local testing)
   llama-server:
     image: ghcr.io/ggerganov/llama.cpp:server
+    container_name: llama-server
     ports:
-      - "5000:5000"
+      - "5000:8000"
     volumes:
       - ./models:/models
+    environment:
+      - NUM_THREADS=4
+      - CONTEXT_SIZE=2048
     command: >
-      --server
+      /app/server
       --host 0.0.0.0
-      --port 5000
-      --model /models/llama-model.gguf
+      --port 8000
+      --model /models/tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf
       --ctx-size 2048
+      --threads 4
     networks:
-      - clinical-network
+      - nocta-network
 
 networks:
-  clinical-network:
+  nocta-network:
     driver: bridge
