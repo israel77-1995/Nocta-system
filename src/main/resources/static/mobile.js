@@ -1,9 +1,30 @@
+// API Configuration
+const API_BASE_URL = window.location.origin + '/api/v1';
 let currentClinician = null;
 let currentPatient = null;
 let currentPatientName = null;
 let isRecording = false;
 let recognition = null;
 let consultationId = null;
+
+// Utility function for API calls
+async function apiCall(endpoint, options = {}) {
+    const url = `${API_BASE_URL}${endpoint}`;
+    const response = await fetch(url, {
+        ...options,
+        headers: {
+            'Content-Type': 'application/json',
+            ...options.headers
+        }
+    });
+    
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({ message: 'Unknown error' }));
+        throw new Error(error.message || `HTTP ${response.status}`);
+    }
+    
+    return response.json();
+}
 
 function showScreen(screenId) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -170,21 +191,18 @@ async function submitConsultation() {
     animateProcessingSteps();
 
     try {
-        const response = await fetch('/api/v1/consultations/upload-audio', {
+        const data = await apiCall('/consultations/upload-audio', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 patientId: currentPatient,
                 clinicianId: currentClinician,
-                rawTranscript: transcript
+                rawTranscript: transcript,
+                audioUrl: null
             })
         });
 
-        if (!response.ok) throw new Error('Failed to submit consultation');
-
-        const data = await response.json();
-        consultationId = data.consultationId;
-        alert('DEBUG: Got consultation ID ' + consultationId);
+        consultationId = data.id;
+        console.log('Consultation submitted with ID:', consultationId);
 
         await pollConsultationStatus(consultationId);
     } catch (error) {
@@ -200,18 +218,10 @@ async function pollConsultationStatus(id) {
 
     const poll = async () => {
         try {
-            const response = await fetch(`/api/v1/consultations/${id}/status`);
-            if (!response.ok) throw new Error('Failed to check status');
-
-            const data = await response.json();
+            const data = await apiCall(`/consultations/${id}/status`);
             console.log('Poll attempt', attempts, 'State:', data.state);
-            
-            if (attempts === 0) {
-                alert('DEBUG: First poll - state is ' + data.state);
-            }
 
             if (data.state === 'READY' || data.state === 'COMPLETED') {
-                alert('DEBUG: State is READY, loading details');
                 console.log('Consultation ready, loading details');
                 await loadConsultationDetails(id);
                 return;
@@ -240,10 +250,7 @@ async function pollConsultationStatus(id) {
 async function loadConsultationDetails(id) {
     try {
         console.log('Loading consultation details for', id);
-        const response = await fetch(`/api/v1/consultations/${id}`);
-        if (!response.ok) throw new Error('Failed to load consultation');
-
-        const data = await response.json();
+        const data = await apiCall(`/consultations/${id}`);
         console.log('Consultation data loaded:', data.state);
         displayResults(data);
     } catch (error) {
