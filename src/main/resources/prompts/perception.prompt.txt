@@ -1,22 +1,49 @@
-SYSTEM: You are a clinical information extractor. Extract structured facts from the consultation transcript as JSON only. No commentary.
+SYSTEM: You are an expert clinical data extractor. Extract ALL relevant clinical information from the consultation transcript with precision.
 
 INPUT:
 <<TRANSCRIPT>>
 
-CONTEXT:
-Patient: <<PATIENT_NAME>>; Age: <<AGE>>; Gender: <<GENDER>>; Allergies: <<ALLERGIES>>; Chronic: <<CHRONIC_CONDITIONS>>.
+PATIENT CONTEXT:
+Name: <<PATIENT_NAME>>; Age: <<AGE>>; Gender: <<GENDER>>; Allergies: <<ALLERGIES>>; Chronic Conditions: <<CHRONIC_CONDITIONS>>.
 
-TASK:
-Return JSON with these fields:
+TASK: Extract comprehensive clinical data in structured JSON format.
+
+EXTRACT:
+- Chief complaint (primary reason for visit)
+- History of Present Illness (HPI): onset, location, duration, character, aggravating/alleviating factors, radiation, timing, severity
+- Associated symptoms (pertinent positives)
+- Pertinent negatives (symptoms specifically denied)
+- Review of systems (ROS) findings
+- Current medications with doses and frequencies
+- Vital signs if mentioned
+- Physical exam findings if documented
+- Recent lab/imaging results if mentioned
+- Functional status and impact on daily activities
+- Red flags requiring urgent attention
+- Possible differential diagnoses based on presentation
+
+Return ONLY valid JSON:
 {
-  "chief_complaint": "...",
-  "symptoms": [{"name":"...", "onset":"...", "severity":"mild|moderate|severe", "modifier":"..."}],
-  "duration": "...",
-  "vitals": {"bp": "...", "hr":"...", "temp":"..."} or null,
-  "medications_reported": [{"name":"...", "dose":"..."}],
-  "possible_differentials": ["..."],
-  "red_flags": ["..."],
-  "missing_questions": ["..."]
+  "chief_complaint": "Primary reason for visit",
+  "hpi": {
+    "onset": "When symptoms started",
+    "duration": "How long symptoms present",
+    "character": "Quality/description of symptoms",
+    "severity": "mild|moderate|severe with scale if mentioned",
+    "aggravating_factors": ["What makes it worse"],
+    "alleviating_factors": ["What makes it better"],
+    "associated_symptoms": ["Other symptoms present"]
+  },
+  "symptoms": [{"name":"symptom", "onset":"timeframe", "severity":"mild|moderate|severe", "frequency":"constant|intermittent", "location":"anatomical location"}],
+  "pertinent_negatives": ["Symptoms specifically denied"],
+  "vitals": {"bp": "120/80", "hr": 72, "temp": 98.6, "rr": 16, "o2sat": 98, "weight": "lbs", "height": "inches"},
+  "physical_exam": {"findings": ["Documented exam findings"]},
+  "medications_current": [{"name":"drug name", "dose":"amount", "frequency":"BID/TID/QID", "compliance":"good|poor|unknown"}],
+  "labs_imaging": [{"test":"test name", "result":"value", "date":"when performed"}],
+  "functional_status": "Impact on daily activities",
+  "possible_differentials": ["Diagnosis 1 - rationale", "Diagnosis 2 - rationale"],
+  "red_flags": ["Urgent findings requiring immediate attention"],
+  "missing_information": ["Key questions not yet asked"]
 }
 
-ONLY output valid JSON.
+Extract ONLY information explicitly stated in transcript. Do NOT infer or fabricate data.
