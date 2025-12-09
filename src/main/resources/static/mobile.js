@@ -749,6 +749,82 @@ async function viewHistoryDetail(consultationId) {
     }
 }
 
+let capturedImageData = null;
+
+function captureImage() {
+    document.getElementById('imageInput').click();
+}
+
+async function handleImageCapture(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    console.log('Image captured:', file.name, file.size);
+    
+    // Show modal
+    document.getElementById('imageModal').style.display = 'flex';
+    document.getElementById('imageAnalysisLoading').style.display = 'flex';
+    document.getElementById('imageAnalysisResult').style.display = 'none';
+    
+    // Display image
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+        const img = document.getElementById('capturedImage');
+        img.src = e.target.result;
+        
+        // Convert to base64
+        const base64 = e.target.result.split(',')[1];
+        capturedImageData = base64;
+        
+        // Analyze with LLAMA Vision
+        try {
+            const context = document.getElementById('transcript').value.trim() || 'No additional context provided';
+            
+            const response = await apiCall('/image-analysis/analyze', {
+                method: 'POST',
+                body: JSON.stringify({
+                    base64Image: base64,
+                    context: context
+                })
+            });
+            
+            document.getElementById('imageAnalysisLoading').style.display = 'none';
+            document.getElementById('imageAnalysisResult').style.display = 'block';
+            
+            if (response.success) {
+                document.getElementById('analysisText').textContent = response.analysis;
+            } else {
+                document.getElementById('analysisText').textContent = 'Analysis failed: ' + response.error;
+            }
+            
+        } catch (error) {
+            console.error('Image analysis error:', error);
+            document.getElementById('imageAnalysisLoading').style.display = 'none';
+            document.getElementById('imageAnalysisResult').style.display = 'block';
+            document.getElementById('analysisText').textContent = 'Error analyzing image: ' + error.message;
+        }
+    };
+    
+    reader.readAsDataURL(file);
+}
+
+function closeImageModal() {
+    document.getElementById('imageModal').style.display = 'none';
+    document.getElementById('imageInput').value = '';
+}
+
+function addAnalysisToNotes() {
+    const analysis = document.getElementById('analysisText').textContent;
+    const currentNotes = document.getElementById('transcript').value;
+    
+    const separator = currentNotes ? '\n\n--- AI IMAGE ANALYSIS ---\n' : '--- AI IMAGE ANALYSIS ---\n';
+    document.getElementById('transcript').value = currentNotes + separator + analysis;
+    document.getElementById('submitBtn').disabled = false;
+    
+    closeImageModal();
+    alert('✓ Image analysis added to consultation notes');
+}
+
 function showSuccessAnimation() {
     const overlay = document.createElement('div');
     overlay.style.cssText = `
