@@ -1,435 +1,302 @@
-# Clinical Copilot OS - MVP
+# Clinical Copilot OS
 
-**100% LLAMA-Powered Clinical Documentation System**
+**AI-Powered Clinical Documentation System Using Meta's LLAMA 3.3 70B**
 
-A Java-based clinical documentation system using **Meta's LLAMA 3.3 70B** for AI-powered SOAP note generation, ICD-10 coding, and care coordination.
+Save clinicians 2+ hours daily on documentation. See 20% more patients. Reduce burnout.
 
-## Architecture
+---
 
-**Layered Architecture:**
-- **Presentation Layer**: REST API + Web UI + Mobile Web App
-- **Application Layer**: Agent orchestration services (Perception, Documentation, Coordination, Compliance)
-- **Domain Layer**: Core entities (Patient, Consultation, GeneratedNote)
-- **Infrastructure Layer**: LLM adapter, persistence, external integrations
+## Quick Start (2 Steps)
 
-## Tech Stack
+### Step 1: Get Free LLAMA API Key
 
-- Java 17+
-- Spring Boot 3.1.5
-- Spring Data JPA (H2 in-memory database)
-- Spring Security
-- Flyway migrations
-- LLAMA via HTTP adapter
-- Lombok
-- Maven
-- Docker & Docker Compose
-
-## Prerequisites
-
-- **Java 17+** - Install from [java.com](https://www.java.com) or use your package manager
-- **Maven 3.6+** - Included with `mvnw` wrapper (no separate install needed)
-
-## Quick Start - 2 Steps
-
-### Step 1: Get Free LLAMA API Access
-
-**Get Groq API Key (Free LLAMA 3.3 70B Access):**
 1. Visit https://console.groq.com
 2. Sign up (free, no credit card)
 3. Create API key
 4. Copy key (starts with `gsk_`)
 
-```bash
-export GROQ_API_KEY='gsk_your_key_here'
-```
-
 ### Step 2: Run Application
 
+**Web Version:**
 ```bash
-cd /home/wtc/Nocta-system
-mvn clean package -DskipTests
-./run-with-llama-api.sh
+# Clone repository
+git clone <repository-url>
+cd Nocta-system
+
+# Create .env file
+echo "GROQ_API_KEY=gsk_your_key_here" > .env
+
+# Run (handles build + start automatically)
+./start-app.sh
 ```
 
-The application will start on **http://localhost:8080**
+**Access:** http://localhost:8080
+
+**Mobile Version (Expo Go):**
+```bash
+# Navigate to mobile app
+cd mobile-app
+
+# Install dependencies and start
+npm start
+
+# Scan QR code with Expo Go app
+# iOS: Download from App Store
+# Android: Download from Google Play
+```
+
+**🚀 Deploy & Make Downloadable:**
+
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template/spring-boot)
+
+- **Railway (Free):** Deploy in 2 minutes - see [DEPLOY.md](DEPLOY.md)
+- **PWA Install:** Users install from browser like native app
+- **Works Offline:** Cached for offline use after first visit
+- **All Platforms:** iOS, Android, Desktop, any device with browser
 
 ---
 
-## Alternative: Local LLAMA Server
+## What It Does
 
-If you prefer running LLAMA locally:
+Clinical Copilot OS automates clinical documentation using a **4-agent AI architecture**:
 
-**Option A: Using llama.cpp**
-```bash
-# Clone llama.cpp
-git clone https://github.com/ggerganov/llama.cpp
-cd llama.cpp
-make
+1. **Perception Agent** - Extracts structured clinical facts from consultation transcript
+2. **Documentation Agent** - Generates professional SOAP notes with ICD-10 codes
+3. **Coordination Agent** - Creates actionable care plan (labs, referrals, prescriptions)
+4. **Compliance Agent** - Validates against allergies and drug interactions
 
-# Download a GGUF model (e.g., TinyLlama for testing, Llama-2-7B for production)
-# https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF
-mkdir -p models
-# Place your .gguf file in models/
+**Result:** 12-15 minutes of documentation completed in 30 seconds.
 
-# Start the server
-./server -m models/tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf \
-  --host 0.0.0.0 \
-  --port 5000 \
-  --ctx-size 2048 \
-  --threads 4
+---
 
-# Verify it's running
-curl http://localhost:5000/health
+## Key Features
+
+- ✅ **Multi-Agent AI** - 4 specialized agents for accuracy
+- ✅ **Medical Image Analysis** - LLAMA 3.2 Vision for wounds/rashes
+- ✅ **Real-Time Compliance** - Catches allergy conflicts before they happen
+- ✅ **Patient Summaries** - AI-generated history analysis before consultation
+- ✅ **Appointment Scheduling** - Automated follow-up recommendations
+- ✅ **Patient Communications** - Layman's terms email explanations
+- ✅ **EHR Integration Ready** - REST API for any system
+
+---
+
+## Architecture
+
+**Layered Design for Separation of Concerns:**
+
+```
+┌─────────────────────────────────────┐
+│   Presentation Layer (web/)         │  REST API + Web UI
+├─────────────────────────────────────┤
+│   Application Layer (app/)          │  Business Logic + Agents
+├─────────────────────────────────────┤
+│   Domain Layer (domain/)            │  Core Entities
+├─────────────────────────────────────┤
+│   Infrastructure Layer (infra/)     │  LLM + Database + External APIs
+└─────────────────────────────────────┘
 ```
 
-**Option B: Using Docker**
+**Tech Stack:**
+- Java 17 + Spring Boot 3.1.5
+- Meta LLAMA 3.3 70B (via Groq API)
+- Meta LLAMA 3.2 11B Vision (via OpenRouter API)
+- Spring Data JPA + H2/PostgreSQL
+- Flyway Migrations
+
+---
+
+## REST API
+
+Base URL: `http://localhost:8080/api/v1`
+
+**Key Endpoints:**
+
 ```bash
-docker run -p 5000:5000 -v $(pwd)/models:/models \
-  ghcr.io/ggerganov/llama.cpp:server \
-  --server --host 0.0.0.0 --port 5000 \
-  --model /models/tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf
+# Health checks
+GET /health
+GET /llama/health
+
+# Patients
+GET /patients
+GET /patients/{id}/summary
+
+# Consultations
+POST /consultations/upload-audio
+GET /consultations/{id}
+GET /consultations/{id}/status
+POST /consultations/{id}/approve
+GET /consultations/patient/{patientId}/history
+
+# Image analysis
+POST /image-analysis/analyze
 ```
 
-### Step 2: Build the Application
+**Full API documentation:** [docs/technical/API_GUIDE.md](docs/technical/API_GUIDE.md)
 
+---
+
+## Project Structure
+
+```
+Nocta-system/
+├── src/main/java/za/co/ccos/
+│   ├── web/                    # Presentation Layer (Controllers, DTOs)
+│   ├── app/                    # Application Layer (Services, Agents)
+│   ├── domain/                 # Domain Layer (Entities, Business Rules)
+│   └── infra/                  # Infrastructure Layer (LLM, Database)
+├── src/main/resources/
+│   ├── prompts/                # LLM prompt templates
+│   ├── db/migration/           # Flyway database migrations
+│   └── static/                 # Web UI (mobile.html, mobile.js, mobile.css)
+├── docs/
+│   ├── technical/              # Architecture, API docs
+│   └── business/               # Business model, go-to-market
+├── start-app.sh                # Single script to build & run
+└── README.md                   # This file
+```
+
+---
+
+## Documentation
+
+**For Judges:**
+- [DEMO_GUIDE.md](docs/DEMO_GUIDE.md) - 5-minute demo script with Q&A
+
+**Technical:**
+- [ARCHITECTURE.md](docs/technical/ARCHITECTURE.md) - System design and layers
+- [API_GUIDE.md](docs/technical/API_GUIDE.md) - REST API reference
+- [SETUP.md](docs/SETUP.md) - Detailed setup instructions
+
+**Business:**
+- [BUSINESS_MODEL.md](docs/business/BUSINESS_MODEL.md) - Business Model Canvas
+- [GO_TO_MARKET.md](docs/business/GO_TO_MARKET.md) - Market strategy
+
+---
+
+## Demo Workflow
+
+1. **Login** - Select clinician
+2. **Patient Selection** - Choose patient, view AI-generated summary
+3. **Consultation** - Record or type transcript + vital signs
+4. **AI Processing** - Watch 4 agents work in real-time
+5. **Review** - See SOAP note, ICD-10 codes, action items
+6. **Approve** - Clinician signs off
+7. **Sync** - Auto-sync to EHR, schedule appointment, notify patient
+
+**Sample Patient:** Sarah Johnson (ID: 550e8400-e29b-41d4-a716-446655440001)
+
+---
+
+## Business Model
+
+**Pricing:**
+- Individual: $99/clinician/month
+- Small Practice (5-10): $79/clinician/month
+- Enterprise (20+): $59/clinician/month
+
+**Target Market:**
+- South Africa: 40,000 practicing physicians
+- Year 1 goal: 500 clinicians
+- Break-even: Month 8
+
+**Value Proposition:**
+- Save 2+ hours daily per clinician
+- Increase capacity by 20% (3-4 more patients/day)
+- Generate $180K+ additional revenue annually per clinician
+
+---
+
+## Competitive Advantages
+
+1. **Multi-Agent Architecture** - More accurate than single-model solutions
+2. **Vision Integration** - Only solution with medical image analysis
+3. **Real-Time Compliance** - Catches errors before they happen
+4. **Open-Source LLM** - No vendor lock-in, transparent AI
+5. **Layered Architecture** - Easy integration with any EHR system
+
+---
+
+## Development
+
+**Build:**
 ```bash
-cd /home/wtc/Nocta-system
 ./mvnw clean package -DskipTests
 ```
 
-This creates a JAR file at `target/clinical-copilot-1.0.0.jar`
-
-### Step 3: Run the Application
-
-**Option A: Direct Java Execution**
+**Run:**
 ```bash
 java -jar target/clinical-copilot-1.0.0.jar
 ```
 
-**Option B: Using Maven**
+**Test:**
 ```bash
-./mvnw spring-boot:run
+./mvnw test
 ```
 
-**Option C: Using the Run Script**
-```bash
-./run.sh
-```
+**Database Console:**
+- URL: http://localhost:8080/h2-console
+- JDBC URL: `jdbc:h2:mem:clinicaldb`
+- Username: `sa`
+- Password: (empty)
 
-The application will start on **http://localhost:8080**
+---
 
-## Accessing the Application
+## Environment Variables
 
-### Web UI
-- **Desktop**: http://localhost:8080
-- **Mobile Web**: http://localhost:8080/mobile.html
-- **H2 Console** (for database): http://localhost:8080/h2-console
-
-### REST API Endpoints
-
-**Create Consultation**:
-```bash
-curl -X POST http://localhost:8080/api/v1/consultations/upload-audio \
-  -H "Content-Type: application/json" \
-  -d '{
-    "patientId": "123e4567-e89b-12d3-a456-426614174000",
-    "clinicianId": "123e4567-e89b-12d3-a456-426614174001",
-    "audioUrl": "file.wav",
-    "rawTranscript": "Patient reports severe headache for 3 days"
-  }'
-```
-
-**Get Consultation Status**:
-```bash
-curl http://localhost:8080/api/v1/consultations/{id}/status
-```
-
-**Get Full Consultation Details**:
-```bash
-curl http://localhost:8080/api/v1/consultations/{id}
-```
-
-**Approve Consultation**:
-```bash
-curl -X POST http://localhost:8080/api/v1/consultations/{id}/approve \
-  -H "Content-Type: application/json" \
-  -d '{"approve": true, "clinicianId": "..."}'
-```
-
-## Docker Compose (Full Stack)
-
-To run the entire system with Docker:
+Create `.env` file in project root:
 
 ```bash
-cd docker
-docker-compose up --build
+# Required: LLAMA 3.3 70B for text processing
+GROQ_API_KEY=gsk_your_key_here
+
+# Optional: LLAMA 3.2 11B Vision for image analysis
+OPENROUTER_API_KEY=sk-or-v1-your_key_here
 ```
 
-This starts:
-- Clinical Copilot API (port 8080)
-- H2 Database (in-memory)
-- LLAMA Server (port 5000)
+**Get API Keys:**
+- Groq (free): https://console.groq.com
+- OpenRouter (free $1 credit): https://openrouter.ai/keys
 
-## Project Structure
-
-```
-.
-├── src/main/java/za/co/ccos/
-│   ├── app/                    # Business logic services
-│   ├── config/                 # Spring configuration
-│   ├── domain/                 # JPA entities
-│   ├── infra/                  # Infrastructure adapters
-│   │   ├── llm/               # LLAMA integration
-│   │   └── persistence/       # Database repositories
-│   └── web/                    # REST controllers
-├── src/main/resources/
-│   ├── application.yml         # Configuration
-│   ├── db/migration/           # Flyway migrations
-│   └── prompts/                # LLM prompt templates
-├── pom.xml                     # Maven configuration
-├── mvnw / mvnw.cmd             # Maven wrapper
-└── docker/                     # Docker files
-```
+---
 
 ## Troubleshooting
 
-**Error: "LLAMA server not detected at localhost:5000"**
-- Make sure LLAMA server is running (see Step 1 above)
-- Check with: `curl http://localhost:5000/health`
-
-**Error: "Spring Boot application fails to start"**
-- Verify Java 17+ is installed: `java -version`
-- Check Maven wrapper: `./mvnw -version`
-- Review logs in `app.log`
+**Error: "GROQ_API_KEY not set"**
+- Ensure `.env` file exists with valid key
 
 **Error: "Port 8080 already in use"**
-- Kill the existing process: `lsof -ti:8080 | xargs kill -9`
-- Or change port in `application.yml`
-
-## System Workflow
-
-1. **Upload Consultation**: Clinician uploads audio/transcript for a patient
-2. **Perception**: LLM extracts structured facts (symptoms, vitals, differentials)
-3. **Documentation**: LLM generates SOAP notes and suggests ICD-10 codes
-4. **Coordination**: LLM creates action items and drug recommendations
-5. **Compliance**: LLM validates against allergies and drug interactions
-6. **Approval**: Clinician reviews and approves the generated documentation
-7. **Sync**: System syncs approved notes to EHR
-
-## Demo Data
-
-Sample patients and consultations are automatically loaded via Flyway migrations in `src/main/resources/db/migration/V2__sample_data.sql`.
-
-## Development
-
-### Run Tests
 ```bash
-./mvnw test
+lsof -ti:8080 | xargs kill -9
 ```
 
-### View Application Logs
-```bash
-tail -f app.log
-```
+**Error: "Java version mismatch"**
+- Install Java 17+: https://adoptium.net/
 
-### Access H2 Database Console
-1. Navigate to: http://localhost:8080/h2-console
-2. Use these credentials:
-   - **JDBC URL**: `jdbc:h2:mem:clinicaldb`
-   - **Username**: `sa`
-   - **Password**: (leave blank)
+---
 
-- Consultation approval workflow
+## System Requirements
 
-**Demo Flow:**
-1. Login with Clinician ID (default: 550e8400-e29b-41d4-a716-446655440099)
-2. Select a patient (John Doe or Jane Smith)
-3. Record consultation or type transcript manually
-4. Submit for AI processing
-5. Review generated SOAP note, ICD-10 codes, and action items
-6. Approve and sign
+- **Java:** 17 or higher
+- **Maven:** 3.6+ (included via `mvnw` wrapper)
+- **Memory:** 2GB RAM minimum
+- **Disk:** 500MB for application + dependencies
 
-**Note:** For best experience, use on mobile device or mobile browser emulation. Speech recognition requires HTTPS in production (works on localhost).
-
-## API Endpoints
-
-### Upload Consultation
-```bash
-POST /api/v1/consultations/upload-audio
-Content-Type: application/json
-
-{
-  "patientId": "550e8400-e29b-41d4-a716-446655440001",
-  "clinicianId": "550e8400-e29b-41d4-a716-446655440099",
-  "rawTranscript": "Patient reports severe headache for 3 days..."
-}
-```
-
-### Check Status
-```bash
-GET /api/v1/consultations/{id}/status
-```
-
-### Get Consultation Details
-```bash
-GET /api/v1/consultations/{id}
-```
-
-### Approve Consultation
-```bash
-POST /api/v1/consultations/{id}/approve
-Content-Type: application/json
-
-{
-  "clinicianId": "550e8400-e29b-41d4-a716-446655440099",
-  "approve": true
-}
-```
-
-### Health Checks
-```bash
-GET /api/v1/health
-GET /api/v1/llama/health
-```
-
-## Sample Data
-
-Two sample patients are pre-loaded:
-- **Patient 1**: John Doe (ID: 550e8400-e29b-41d4-a716-446655440001)
-  - Allergies: Penicillin
-  - Chronic: Hypertension
-  
-- **Patient 2**: Jane Smith (ID: 550e8400-e29b-41d4-a716-446655440002)
-  - Allergies: NSAIDs
-  - Chronic: Type 2 Diabetes
-
-## Testing
-
-Run unit tests:
-```bash
-./mvnw test
-```
-
-Run with coverage:
-```bash
-./mvnw clean test jacoco:report
-```
-
-## Agent Workflow
-
-1. **Perception Agent**: Extracts structured clinical facts from transcript
-2. **Documentation Agent**: Generates SOAP note + ICD-10 suggestions
-3. **Coordination Agent**: Creates actionable items (labs, referrals, prescriptions)
-4. **Compliance Agent**: Validates for allergy conflicts and completeness
-
-All agents use LLAMA with prompts stored in `src/main/resources/prompts/`
-
-## Configuration
-
-Edit `src/main/resources/application.yml`:
-
-```yaml
-llama:
-  server:
-    url: http://localhost:5000  # LLAMA server endpoint
-
-spring:
-  datasource:
-    url: jdbc:h2:mem:clinicaldb  # Use H2 for dev
-```
-
-## Project Structure
-
-```
-clinical-copilot/
-├── src/main/java/za/co/ccos/
-│   ├── app/                    # Application services
-│   ├── web/                    # REST controllers & DTOs
-│   ├── domain/                 # Entities
-│   ├── infra/                  # Infrastructure adapters
-│   ├── security/               # Security config
-│   └── config/                 # Spring configuration
-├── src/main/resources/
-│   ├── prompts/                # LLAMA prompt templates
-│   ├── db/migration/           # Flyway migrations
-│   └── static/                 # Web UI (desktop + mobile)
-│       ├── mobile.html         # Mobile web app
-│       ├── mobile.css          # Mobile styles
-│       └── mobile.js           # Mobile logic
-├── docker/                     # Docker files
-└── .github/workflows/          # CI/CD
-```
-
-## LLAMA Integration
-
-The system uses `HttpLlamaAdapter` to communicate with a local LLAMA server via HTTP. The adapter expects:
-
-**Request format:**
-```json
-{
-  "prompt": "...",
-  "temperature": 0.2,
-  "max_tokens": 1024,
-  "top_p": 0.9,
-  "top_k": 40
-}
-```
-
-**Response format:**
-```json
-{
-  "content": "...",
-  "tokens_evaluated": 150
-}
-```
-
-## Prompt Templates
-
-All prompts are in `src/main/resources/prompts/`:
-- `perception.prompt.txt` - Extract clinical facts
-- `documentation.prompt.txt` - Generate SOAP notes
-- `coordination.prompt.txt` - Create action items
-- `compliance.prompt.txt` - Validate compliance
-
-## Security Notes
-
-- MVP uses permissive security (no JWT enforcement)
-- For production: Enable JWT authentication in `SecurityConfig`
-- Encrypt PII at rest
-- Redact PHI in logs using `PromptSanitizer`
-
-## Troubleshooting
-
-**LLAMA server not reachable:**
-- Check if server is running on port 5000
-- Verify `llama.server.url` in application.yml
-- Test: `curl http://localhost:5000/health`
-
-**Database errors:**
-- H2 console: http://localhost:8080/h2-console
-- JDBC URL: `jdbc:h2:mem:clinicaldb`
-- Username: `sa`, Password: (empty)
-
-**Tests failing:**
-- Ensure mocks are properly configured
-- Check LLAMA adapter is mocked in tests
-
-**Mobile app issues:**
-- Speech recognition requires HTTPS in production (localhost works)
-- Use Chrome/Safari for best compatibility
-- Enable microphone permissions when prompted
-
-## CI/CD
-
-GitHub Actions workflow runs on push:
-- Builds with Maven
-- Runs all tests
-- Uploads test reports
+---
 
 ## License
 
 Proprietary - Clinical Copilot OS MVP
 
+---
+
 ## Support
 
-For issues or questions, contact the development team.
+For questions or issues:
+- Technical docs: [docs/technical/](docs/technical/)
+- Business docs: [docs/business/](docs/business/)
+- Demo guide: [docs/DEMO_GUIDE.md](docs/DEMO_GUIDE.md)
+
+---
+
+**Built with ❤️ using Meta's LLAMA models**

@@ -43,6 +43,10 @@ Nocta listens to clinical encounters (with patient consent), converts speech to 
 * Clinician review UI with one-tap accept/push to EHR (FHIR-compatible)
 * Audit logging, consent capture, and RBAC
 
+## Suggested Tech Stack
+
+(You said you want Java in the backend — this stack integrates Java where it makes sense.)
+
 **Client / Edge**
 
 * React Native (mobile clinician app) or Progressive Web App (PWA)

@@ -126,7 +126,7 @@ Spring Boot Backend
     └── H2 Database
 ```
 
-## 📊 Sample Test Cases
+##  Sample Test Cases
 
 ### Test Case 1: Headache
 ```
@@ -170,7 +170,7 @@ curl -X POST http://localhost:8080/api/v1/consultations/upload-audio \
   -d '{"patientId":"550e8400-e29b-41d4-a716-446655440001","clinicianId":"550e8400-e29b-41d4-a716-446655440099","rawTranscript":"Patient reports headache"}'
 ```
 
-## 🎯 Demo Tips
+##  Demo Tips
 
 1. **Prepare Sample Text**: Have consultation notes ready to paste
 2. **Show Processing**: Highlight the AI processing steps
@@ -194,7 +194,7 @@ curl -X POST http://localhost:8080/api/v1/consultations/upload-audio \
 - Verify mock LLAMA is enabled in application.yml
 - Restart backend if needed
 
-## 📈 Next Steps for Production
+##  Next Steps for Production
 
 1. **Real LLAMA Integration**: Replace mock with actual LLAMA server
 2. **Authentication**: Enable JWT security
@@ -205,12 +205,12 @@ curl -X POST http://localhost:8080/api/v1/consultations/upload-audio \
 
 ## 🎉 Success Metrics
 
-- ✅ Complete consultation in < 2 minutes
-- ✅ AI processing in < 10 seconds
-- ✅ Accurate clinical documentation
-- ✅ Zero data entry errors
-- ✅ Beautiful, intuitive UI
-- ✅ Works on iOS and Android
+- Complete consultation in < 2 minutes
+- AI processing in < 10 seconds
+- Accurate clinical documentation
+- Zero data entry errors
+- Beautiful, intuitive UI
+- Works on iOS and Android
 
 ---
 
