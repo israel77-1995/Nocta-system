@@ -32,7 +32,7 @@ public class GroqVisionAdapter {
     public String analyzeImage(String base64Image, String prompt) throws LlamaException {
         try {
             String requestBody = objectMapper.writeValueAsString(Map.of(
-                "model", "llama-3.2-11b-vision-preview",
+                "model", "llama-3.2-90b-vision-preview",
                 "messages", new Object[]{
                     Map.of(
                         "role", "user",
@@ -46,7 +46,7 @@ public class GroqVisionAdapter {
                     )
                 },
                 "temperature", 0.2,
-                "max_tokens", 500
+                "max_tokens", 1024
             ));
             
             HttpRequest request = HttpRequest.newBuilder()
