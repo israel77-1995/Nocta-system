@@ -26,14 +26,16 @@ public class ConsultationOrchestrator {
     private final ObjectMapper objectMapper;
     
     @Async
-    @Transactional
     public void processConsultation(UUID consultationId) {
         try {
+            log.info("Starting async processing of consultation {}", consultationId);
+            
+            // Fetch consultation
             Consultation consultation = consultationRepository.findById(consultationId)
                     .orElseThrow(() -> new RuntimeException("Consultation not found"));
             
-            consultation.setState(ConsultationState.PROCESSING);
-            consultationRepository.save(consultation);
+            // Update state
+            updateConsultationState(consultationId, ConsultationState.PROCESSING);
             
             Patient patient = patientRepository.findById(consultation.getPatientId())
                     .orElseThrow(() -> new RuntimeException("Patient not found"));
@@ -70,23 +72,42 @@ public class ConsultationOrchestrator {
             
             log.info("Compliance check result: {}", complianceResult);
             
-            // Save note
-            GeneratedNote savedNote = generatedNoteRepository.save(note);
-            
-            // Update consultation
-            consultation.setGeneratedNoteId(savedNote.getId());
-            consultation.setState(ConsultationState.READY);
-            consultationRepository.save(consultation);
+            // Save note with transaction
+            saveNoteAndUpdateConsultation(note, consultationId);
             
             log.info("Consultation {} processed successfully", consultationId);
             
         } catch (Exception e) {
             log.error("Error processing consultation {}", consultationId, e);
-            consultationRepository.findById(consultationId).ifPresent(c -> {
-                c.setState(ConsultationState.ERROR);
-                c.setErrorMessage(e.getMessage());
-                consultationRepository.save(c);
-            });
+            updateConsultationError(consultationId, e.getMessage());
         }
+    }
+    
+    @Transactional
+    private void saveNoteAndUpdateConsultation(GeneratedNote note, UUID consultationId) {
+        GeneratedNote savedNote = generatedNoteRepository.save(note);
+        
+        Consultation consultation = consultationRepository.findById(consultationId)
+                .orElseThrow(() -> new RuntimeException("Consultation not found"));
+        consultation.setGeneratedNoteId(savedNote.getId());
+        consultation.setState(ConsultationState.READY);
+        consultationRepository.save(consultation);
+    }
+    
+    @Transactional
+    private void updateConsultationState(UUID consultationId, ConsultationState state) {
+        Consultation consultation = consultationRepository.findById(consultationId)
+                .orElseThrow(() -> new RuntimeException("Consultation not found"));
+        consultation.setState(state);
+        consultationRepository.save(consultation);
+    }
+    
+    @Transactional
+    private void updateConsultationError(UUID consultationId, String errorMessage) {
+        consultationRepository.findById(consultationId).ifPresent(c -> {
+            c.setState(ConsultationState.ERROR);
+            c.setErrorMessage(errorMessage);
+            consultationRepository.save(c);
+        });
     }
 }

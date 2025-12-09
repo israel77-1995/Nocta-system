@@ -1,11 +1,21 @@
 import React, { useRef } from 'react';
-import { StyleSheet, SafeAreaView, Platform, BackHandler } from 'react-native';
+import { StyleSheet, Platform, BackHandler } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { WebView } from 'react-native-webview';
 import { StatusBar } from 'expo-status-bar';
 
-//const API_URL = 'http://10.0.2.2:8081'; // Android emulator
-const API_URL = 'http://localhost:8081'; // iOS simulator
-// const API_URL = 'http://YOUR_IP:8080'; // Physical device
+// Configure API URL based on platform
+// For Android emulator: http://10.0.2.2:8080
+// For iOS simulator: http://localhost:8080
+// For physical device: Use your machine's IP address (e.g., http://192.168.x.x:8080)
+const getAPIURL = () => {
+  if (Platform.OS === 'android') {
+    return 'http://10.0.2.2:8080'; // Android emulator bridge
+  }
+  // For iOS or physical devices, update this to your machine's IP
+  return 'http://localhost:8080';
+};
+const API_URL = getAPIURL();
 
 export default function App() {
   const webViewRef = useRef(null);
