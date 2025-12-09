@@ -21,8 +21,11 @@ public class GroqVisionAdapter {
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
     
-    public GroqVisionAdapter(@Value("${llama.groq.api-key}") String apiKey) {
-        this.apiKey = apiKey;
+    public GroqVisionAdapter(
+            @Value("${llama.openrouter.api-key:}") String openRouterKey,
+            @Value("${llama.groq.api-key}") String groqKey) {
+        // Use OpenRouter key if available, fallback to Groq key
+        this.apiKey = (openRouterKey != null && !openRouterKey.isEmpty()) ? openRouterKey : groqKey;
         this.httpClient = HttpClient.newBuilder()
                 .connectTimeout(Duration.ofSeconds(10))
                 .build();

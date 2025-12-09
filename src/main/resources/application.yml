@@ -35,6 +35,8 @@ llama:
   provider: api  # Options: mock, api
   groq:
     api-key: ${GROQ_API_KEY:your-groq-api-key-here}
+  openrouter:
+    api-key: ${OPENROUTER_API_KEY:your-openrouter-api-key-here}
 
 logging:
   level:

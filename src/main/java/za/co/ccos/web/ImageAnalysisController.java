@@ -27,13 +27,44 @@ public class ImageAnalysisController {
             return ResponseEntity.ok(new ImageAnalysisResponse(true, analysis, null));
             
         } catch (Exception e) {
-            log.error("Image analysis failed", e);
+            log.error("Image analysis failed: {}", e.getMessage());
+            
+            // Provide helpful template as fallback
+            String template = generateDocumentationTemplate(request.getContext());
             return ResponseEntity.ok(new ImageAnalysisResponse(
-                false, 
-                null, 
-                "Image analysis failed: " + e.getMessage()
+                true, 
+                template, 
+                "AI vision unavailable - using documentation template. To enable AI analysis, add OPENROUTER_API_KEY to .env (see OPENROUTER_SETUP.md)"
             ));
         }
+    }
+    
+    private String generateDocumentationTemplate(String context) {
+        StringBuilder template = new StringBuilder();
+        template.append("📸 IMAGE CAPTURED - Clinical Documentation\n\n");
+        
+        if (context != null && !context.isEmpty()) {
+            template.append("CONTEXT: ").append(context).append("\n\n");
+        }
+        
+        template.append("VISUAL FINDINGS:\n");
+        template.append("• Location: [Describe location]\n");
+        template.append("• Size: [Measure in cm]\n");
+        template.append("• Appearance: [Color, texture, borders]\n");
+        template.append("• Drainage: [Type/amount if present]\n");
+        template.append("• Surrounding tissue: [Erythema, warmth, swelling]\n\n");
+        
+        template.append("ASSESSMENT:\n");
+        template.append("• Clinical impression: [Your assessment]\n");
+        template.append("• Differential diagnosis: [Possibilities]\n\n");
+        
+        template.append("PLAN:\n");
+        template.append("• Treatment: [Medications, dressings]\n");
+        template.append("• Follow-up: [Timeline]\n\n");
+        
+        template.append("💡 Image saved for reference. Complete template with your observations.\n");
+        
+        return template.toString();
     }
     
     private String buildPrompt(String context) {
