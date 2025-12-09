@@ -1,0 +1,19 @@
+Generate app icons using:
+https://www.appicon.co/
+
+Required files:
+- icon.png (1024x1024) - Main app icon
+- adaptive-icon.png (1024x1024) - Android adaptive icon
+- splash.png (1242x2436) - Splash screen
+- favicon.png (48x48) - Web favicon
+
+Use the Clinical Copilot logo with:
+- Primary color: #4F46E5 (Indigo)
+- Background: White or transparent
+- Medical cross or stethoscope symbol
+
+Quick placeholder generation:
+1. Go to https://www.appicon.co/
+2. Upload a 1024x1024 logo
+3. Download all sizes
+4. Place in this assets/ folder

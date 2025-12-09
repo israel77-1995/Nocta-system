@@ -1,0 +1,41 @@
+{
+  "expo": {
+    "name": "Clinical Copilot",
+    "slug": "clinical-copilot-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#4F46E5"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "za.co.ccos.clinicalcopilot",
+      "infoPlist": {
+        "NSMicrophoneUsageDescription": "This app needs access to the microphone to record patient consultations.",
+        "NSCameraUsageDescription": "This app needs access to the camera for patient documentation."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#4F46E5"
+      },
+      "package": "za.co.ccos.clinicalcopilot",
+      "permissions": [
+        "RECORD_AUDIO",
+        "CAMERA",
+        "INTERNET"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clinical Copilot OS</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px; }
+        h1 { color: #2c3e50; }
+        .section { margin: 20px 0; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
+        textarea { width: 100%; min-height: 150px; padding: 10px; }
+        button { background: #3498db; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #2980b9; }
+        .result { background: #ecf0f1; padding: 15px; margin-top: 10px; border-radius: 5px; }
+        .soap { background: white; padding: 15px; margin: 10px 0; border-left: 4px solid #3498db; }
+        .status { padding: 5px 10px; border-radius: 3px; display: inline-block; }
+        .status.ready { background: #2ecc71; color: white; }
+        .status.processing { background: #f39c12; color: white; }
+        .status.error { background: #e74c3c; color: white; }
+    </style>
+</head>
+<body>
+    <h1>Clinical Copilot OS - MVP</h1>
+    
+    <div class="section">
+        <h2>Upload Consultation Transcript</h2>
+        <label>Patient ID:</label>
+        <input type="text" id="patientId" value="550e8400-e29b-41d4-a716-446655440001" style="width: 100%; padding: 8px; margin: 10px 0;">
+        
+        <label>Clinician ID:</label>
+        <input type="text" id="clinicianId" value="550e8400-e29b-41d4-a716-446655440099" style="width: 100%; padding: 8px; margin: 10px 0;">
+        
+        <label>Transcript:</label>
+        <textarea id="transcript" placeholder="Enter consultation transcript...">Patient reports severe throbbing headache for 3 days, worse with light and noise. Pain is on the right side. BP measured at 140/90. Patient has been taking over-the-counter pain medication with minimal relief.</textarea>
+        
+        <button onclick="uploadConsultation()">Process Consultation</button>
+        <div id="uploadResult" class="result" style="display:none;"></div>
+    </div>
+    
+    <div class="section">
+        <h2>View Consultation Results</h2>
+        <label>Consultation ID:</label>
+        <input type="text" id="consultationId" style="width: 100%; padding: 8px; margin: 10px 0;">
+        <button onclick="getConsultation()">Get Results</button>
+        <button onclick="checkStatus()">Check Status</button>
+        <div id="consultationResult" class="result" style="display:none;"></div>
+    </div>
+    
+    <div class="section">
+        <h2>Approve Consultation</h2>
+        <button onclick="approveConsultation()">Approve & Sync to EHR</button>
+        <div id="approvalResult" class="result" style="display:none;"></div>
+    </div>
+
+    <script>
+        const API_BASE = '/api/v1';
+        
+        async function uploadConsultation() {
+            const data = {
+                patientId: document.getElementById('patientId').value,
+                clinicianId: document.getElementById('clinicianId').value,
+                rawTranscript: document.getElementById('transcript').value
+            };
+            
+            try {
+                const response = await fetch(`${API_BASE}/consultations/upload-audio`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                document.getElementById('consultationId').value = result.consultationId;
+                document.getElementById('uploadResult').style.display = 'block';
+                document.getElementById('uploadResult').innerHTML = `
+                    <strong>Consultation Created!</strong><br>
+                    ID: ${result.consultationId}<br>
+                    Status: <span class="status processing">${result.status}</span><br>
+                    <em>Processing in background... Check status in a few seconds.</em>
+                `;
+                
+                setTimeout(() => checkStatus(), 3000);
+            } catch (error) {
+                document.getElementById('uploadResult').style.display = 'block';
+                document.getElementById('uploadResult').innerHTML = `<strong>Error:</strong> ${error.message}`;
+            }
+        }
+        
+        async function checkStatus() {
+            const id = document.getElementById('consultationId').value;
+            if (!id) return alert('Enter consultation ID');
+            
+            try {
+                const response = await fetch(`${API_BASE}/consultations/${id}/status`);
+                const result = await response.json();
+                
+                document.getElementById('uploadResult').style.display = 'block';
+                document.getElementById('uploadResult').innerHTML = `
+                    Status: <span class="status ${result.state.toLowerCase()}">${result.state}</span>
+                    ${result.errorMessage ? '<br>Error: ' + result.errorMessage : ''}
+                `;
+                
+                if (result.state === 'READY') {
+                    getConsultation();
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+        
+        async function getConsultation() {
+            const id = document.getElementById('consultationId').value;
+            if (!id) return alert('Enter consultation ID');
+            
+            try {
+                const response = await fetch(`${API_BASE}/consultations/${id}`);
+                const result = await response.json();
+                
+                let html = `<h3>Consultation Details</h3>`;
+                html += `<p><strong>Status:</strong> <span class="status ${result.state.toLowerCase()}">${result.state}</span></p>`;
+                html += `<p><strong>Transcript:</strong> ${result.rawTranscript}</p>`;
+                
+                if (result.generatedNote) {
+                    const note = result.generatedNote;
+                    html += `<div class="soap">
+                        <h4>SOAP Note</h4>
+                        <p><strong>Subjective:</strong> ${note.soapSubjective || 'N/A'}</p>
+                        <p><strong>Objective:</strong> ${note.soapObjective || 'N/A'}</p>
+                        <p><strong>Assessment:</strong> ${note.soapAssessment || 'N/A'}</p>
+                        <p><strong>Plan:</strong> ${note.soapPlan || 'N/A'}</p>
+                        <p><strong>Patient Summary:</strong> ${note.patientSummary || 'N/A'}</p>
+                        <p><strong>ICD-10 Codes:</strong> ${note.icd10Codes || 'N/A'}</p>
+                        <p><strong>Suggested Actions:</strong> ${note.suggestedActions || 'N/A'}</p>
+                        <p><strong>Confidence:</strong> ${note.confidence || 'N/A'}</p>
+                    </div>`;
+                }
+                
+                document.getElementById('consultationResult').style.display = 'block';
+                document.getElementById('consultationResult').innerHTML = html;
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+        
+        async function approveConsultation() {
+            const id = document.getElementById('consultationId').value;
+            const clinicianId = document.getElementById('clinicianId').value;
+            if (!id) return alert('Enter consultation ID');
+            
+            try {
+                const response = await fetch(`${API_BASE}/consultations/${id}/approve`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ clinicianId, approve: true })
+                });
+                
+                const result = await response.json();
+                document.getElementById('approvalResult').style.display = 'block';
+                document.getElementById('approvalResult').innerHTML = `
+                    <strong>${result.success ? 'Success!' : 'Failed'}</strong><br>
+                    ${result.message}
+                `;
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>

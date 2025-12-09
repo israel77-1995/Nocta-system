@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.backend
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - LLAMA_SERVER_URL=http://llama-server:5000
+    depends_on:
+      - llama-server
+    networks:
+      - clinical-network
+
+  llama-server:
+    image: ghcr.io/ggerganov/llama.cpp:server
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./models:/models
+    command: >
+      --server
+      --host 0.0.0.0
+      --port 5000
+      --model /models/llama-model.gguf
+      --ctx-size 2048
+    networks:
+      - clinical-network
+
+networks:
+  clinical-network:
+    driver: bridge

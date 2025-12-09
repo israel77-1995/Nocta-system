@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Clinical Copilot</title>
+    <link rel="stylesheet" href="mobile.css?v=2">
+</head>
+<body>
+    <div id="app">
+        <!-- Login Screen -->
+        <div id="loginScreen" class="screen active">
+            <div class="logo">
+                <svg width="60" height="60" viewBox="0 0 60 60">
+                    <circle cx="30" cy="30" r="28" fill="#4F46E5" opacity="0.1"/>
+                    <path d="M30 15 L30 45 M15 30 L45 30" stroke="#4F46E5" stroke-width="4" stroke-linecap="round"/>
+                </svg>
+                <h1>Clinical Copilot</h1>
+            </div>
+            <div class="form-group">
+                <input type="text" id="clinicianId" placeholder="Clinician ID" value="550e8400-e29b-41d4-a716-446655440099">
+            </div>
+            <button class="btn-primary" onclick="login()">Start Session</button>
+        </div>
+
+        <!-- Patient Selection -->
+        <div id="patientScreen" class="screen">
+            <div class="header">
+                <h2>Select Patient</h2>
+                <button class="btn-icon" onclick="logout()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="patient-list">
+                <div class="patient-card" onclick="selectPatient('550e8400-e29b-41d4-a716-446655440001', 'John Doe')">
+                    <div class="patient-avatar">JD</div>
+                    <div class="patient-info">
+                        <h3>John Doe</h3>
+                        <p>Allergies: Penicillin</p>
+                        <p>Chronic: Hypertension</p>
+                    </div>
+                </div>
+                <div class="patient-card" onclick="selectPatient('550e8400-e29b-41d4-a716-446655440002', 'Jane Smith')">
+                    <div class="patient-avatar">JS</div>
+                    <div class="patient-info">
+                        <h3>Jane Smith</h3>
+                        <p>Allergies: NSAIDs</p>
+                        <p>Chronic: Type 2 Diabetes</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Consultation Screen -->
+        <div id="consultationScreen" class="screen">
+            <div class="header">
+                <button class="btn-icon" onclick="backToPatients()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                </button>
+                <h2 id="patientName">Patient</h2>
+            </div>
+            
+            <div class="consultation-content">
+                <div class="record-section">
+                    <button id="recordBtn" class="btn-record" onclick="toggleRecording()">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="currentColor">
+                            <circle cx="16" cy="16" r="12"/>
+                        </svg>
+                        <span>Tap to Record</span>
+                    </button>
+                    <p id="recordStatus" class="record-status">Tap button to record or type below</p>
+                </div>
+
+                <div class="transcript-section">
+                    <h3>Consultation Notes</h3>
+                    <textarea id="transcript" placeholder="Type consultation notes here...\n\nExample: Patient reports severe headache for 3 days, throbbing pain, worse with light. Blood pressure 140/90. No visual changes or neck stiffness. Prescribed ibuprofen 400mg."></textarea>
+                </div>
+
+                <button class="btn-primary" onclick="submitConsultation()" id="submitBtn" disabled>
+                    Generate SOAP Note
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="resultsScreen" class="screen">
+            <div class="header">
+                <button class="btn-icon" onclick="backToConsultation()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                </button>
+                <h2>SOAP Note</h2>
+            </div>
+
+            <div class="results-content">
+                <div id="loadingSpinner" class="loading">
+                    <div class="spinner"></div>
+                    <p>Generating clinical documentation...</p>
+                </div>
+
+                <div id="soapNote" class="soap-note" style="display:none;">
+                    <div class="soap-section">
+                        <h3>Subjective</h3>
+                        <p id="subjective"></p>
+                    </div>
+                    <div class="soap-section">
+                        <h3>Objective</h3>
+                        <p id="objective"></p>
+                    </div>
+                    <div class="soap-section">
+                        <h3>Assessment</h3>
+                        <p id="assessment"></p>
+                    </div>
+                    <div class="soap-section">
+                        <h3>Plan</h3>
+                        <p id="plan"></p>
+                    </div>
+                    <div class="soap-section">
+                        <h3>ICD-10 Codes</h3>
+                        <div id="icdCodes"></div>
+                    </div>
+                    <div class="soap-section">
+                        <h3>Action Items</h3>
+                        <div id="actionItems"></div>
+                    </div>
+                </div>
+
+                <div class="action-buttons" id="actionButtons" style="display:none;">
+                    <button class="btn-secondary" onclick="backToPatients()">New Consultation</button>
+                    <button class="btn-primary" onclick="approveNote()">Approve & Sign</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="mobile.js?v=5"></script>
+</body>
+</html>

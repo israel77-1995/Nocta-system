@@ -1,0 +1,117 @@
+{
+  "info": {
+    "name": "Clinical Copilot OS API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/health",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "health"]
+        }
+      }
+    },
+    {
+      "name": "LLAMA Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/llama/health",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "llama", "health"]
+        }
+      }
+    },
+    {
+      "name": "Upload Consultation",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"patientId\": \"550e8400-e29b-41d4-a716-446655440001\",\n  \"clinicianId\": \"550e8400-e29b-41d4-a716-446655440099\",\n  \"rawTranscript\": \"Patient reports severe throbbing headache for 3 days, worse with light and noise. Pain is on the right side. BP measured at 140/90. Patient has been taking over-the-counter pain medication with minimal relief.\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/consultations/upload-audio",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "consultations", "upload-audio"]
+        }
+      }
+    },
+    {
+      "name": "Get Consultation Status",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/consultations/{{consultationId}}/status",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "consultations", "{{consultationId}}", "status"]
+        }
+      }
+    },
+    {
+      "name": "Get Consultation Details",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/consultations/{{consultationId}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "consultations", "{{consultationId}}"]
+        }
+      }
+    },
+    {
+      "name": "Approve Consultation",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"clinicianId\": \"550e8400-e29b-41d4-a716-446655440099\",\n  \"approve\": true\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/consultations/{{consultationId}}/approve",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "consultations", "{{consultationId}}", "approve"]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "consultationId",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}
