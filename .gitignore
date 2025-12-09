@@ -20,4 +20,6 @@ app.log
 # OS
 .DS_Store
 Thumbs.db
-target/
+
+# Process IDs
+app.pid
