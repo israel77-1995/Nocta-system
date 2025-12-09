@@ -8,7 +8,7 @@
 [INFO] 
 [INFO] --- maven-resources-plugin:3.3.1:resources (default-resources) @ clinical-copilot ---
 [INFO] Copying 1 resource from src/main/resources to target/classes
-[INFO] Copying 8 resources from src/main/resources to target/classes
+[INFO] Copying 11 resources from src/main/resources to target/classes
 [INFO] 
 [INFO] --- maven-compiler-plugin:3.11.0:compile (default-compile) @ clinical-copilot ---
 [INFO] Nothing to compile - all classes are up to date
@@ -33,34 +33,174 @@
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::                (v3.1.5)
 
-2025-12-09T14:21:07.254+02:00  INFO 40859 --- [  restartedMain] za.co.ccos.ClinicalCopilotApplication    : Starting ClinicalCopilotApplication using Java 21.0.8 with PID 40859 (/home/wtc/Nocta-system/target/classes started by wtc in /home/wtc/Nocta-system)
-2025-12-09T14:21:07.257+02:00  INFO 40859 --- [  restartedMain] za.co.ccos.ClinicalCopilotApplication    : No active profile set, falling back to 1 default profile: "default"
-2025-12-09T14:21:08.951+02:00  INFO 40859 --- [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2025-12-09T14:21:08.951+02:00  INFO 40859 --- [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
-2025-12-09T14:21:09.001+02:00  INFO 40859 --- [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2025-12-09T14:21:09.248+02:00  INFO 40859 --- [  restartedMain] o.f.c.internal.license.VersionPrinter    : Flyway Community Edition 9.16.3 by Redgate
-2025-12-09T14:21:09.248+02:00  INFO 40859 --- [  restartedMain] o.f.c.internal.license.VersionPrinter    : See release notes here: https://rd.gt/416ObMi
-2025-12-09T14:21:09.248+02:00  INFO 40859 --- [  restartedMain] o.f.c.internal.license.VersionPrinter    : 
-2025-12-09T14:21:09.257+02:00  INFO 40859 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2025-12-09T14:21:09.543+02:00  INFO 40859 --- [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:clinicaldb user=SA
-2025-12-09T14:21:09.545+02:00  INFO 40859 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2025-12-09T14:21:09.558+02:00  INFO 40859 --- [  restartedMain] o.f.c.i.database.base.BaseDatabaseType   : Database: jdbc:h2:mem:clinicaldb (H2 2.1)
-2025-12-09T14:21:09.606+02:00  INFO 40859 --- [  restartedMain] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table "PUBLIC"."flyway_schema_history" does not exist yet
-2025-12-09T14:21:09.608+02:00  INFO 40859 --- [  restartedMain] o.f.core.internal.command.DbValidate     : Successfully validated 2 migrations (execution time 00:00.011s)
-2025-12-09T14:21:09.616+02:00  INFO 40859 --- [  restartedMain] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table "PUBLIC"."flyway_schema_history" ...
-2025-12-09T14:21:09.637+02:00  INFO 40859 --- [  restartedMain] o.f.core.internal.command.DbMigrate      : Current version of schema "PUBLIC": << Empty Schema >>
-2025-12-09T14:21:09.644+02:00  INFO 40859 --- [  restartedMain] o.f.core.internal.command.DbMigrate      : Migrating schema "PUBLIC" to version "1 - initial schema"
-2025-12-09T14:21:09.661+02:00  INFO 40859 --- [  restartedMain] o.f.core.internal.command.DbMigrate      : Migrating schema "PUBLIC" to version "2 - sample data"
-2025-12-09T14:21:09.666+02:00  INFO 40859 --- [  restartedMain] o.f.core.internal.command.DbMigrate      : Successfully applied 2 migrations to schema "PUBLIC", now at version v2 (execution time 00:00.031s)
-2025-12-09T14:21:09.746+02:00  INFO 40859 --- [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2025-12-09T14:21:09.803+02:00  INFO 40859 --- [  restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.2.13.Final
-2025-12-09T14:21:09.805+02:00  INFO 40859 --- [  restartedMain] org.hibernate.cfg.Environment            : HHH000406: Using bytecode reflection optimizer
-2025-12-09T14:21:10.869+02:00  INFO 40859 --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2025-12-09T14:21:11.220+02:00  WARN 40859 --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2025-12-09T14:21:11.242+02:00  WARN 40859 --- [  restartedMain] .s.s.UserDetailsServiceAutoConfiguration : 
+2025-12-09T15:58:28.516+02:00  INFO 67300 --- [  restartedMain] za.co.ccos.ClinicalCopilotApplication    : Starting ClinicalCopilotApplication using Java 21.0.8 with PID 67300 (/home/wtc/Nocta-system/target/classes started by wtc in /home/wtc/Nocta-system)
+2025-12-09T15:58:28.522+02:00  INFO 67300 --- [  restartedMain] za.co.ccos.ClinicalCopilotApplication    : No active profile set, falling back to 1 default profile: "default"
+2025-12-09T15:58:30.438+02:00  INFO 67300 --- [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-12-09T15:58:30.438+02:00  INFO 67300 --- [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2025-12-09T15:58:30.499+02:00  INFO 67300 --- [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-12-09T15:58:30.767+02:00  INFO 67300 --- [  restartedMain] o.f.c.internal.license.VersionPrinter    : Flyway Community Edition 9.16.3 by Redgate
+2025-12-09T15:58:30.767+02:00  INFO 67300 --- [  restartedMain] o.f.c.internal.license.VersionPrinter    : See release notes here: https://rd.gt/416ObMi
+2025-12-09T15:58:30.767+02:00  INFO 67300 --- [  restartedMain] o.f.c.internal.license.VersionPrinter    : 
+2025-12-09T15:58:30.777+02:00  INFO 67300 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-12-09T15:58:31.022+02:00  INFO 67300 --- [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:clinicaldb user=SA
+2025-12-09T15:58:31.023+02:00  INFO 67300 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-12-09T15:58:31.033+02:00  INFO 67300 --- [  restartedMain] o.f.c.i.database.base.BaseDatabaseType   : Database: jdbc:h2:mem:clinicaldb (H2 2.1)
+2025-12-09T15:58:31.077+02:00  INFO 67300 --- [  restartedMain] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table "PUBLIC"."flyway_schema_history" does not exist yet
+2025-12-09T15:58:31.081+02:00  INFO 67300 --- [  restartedMain] o.f.core.internal.command.DbValidate     : Successfully validated 2 migrations (execution time 00:00.011s)
+2025-12-09T15:58:31.087+02:00  INFO 67300 --- [  restartedMain] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table "PUBLIC"."flyway_schema_history" ...
+2025-12-09T15:58:31.108+02:00  INFO 67300 --- [  restartedMain] o.f.core.internal.command.DbMigrate      : Current version of schema "PUBLIC": << Empty Schema >>
+2025-12-09T15:58:31.115+02:00  INFO 67300 --- [  restartedMain] o.f.core.internal.command.DbMigrate      : Migrating schema "PUBLIC" to version "1 - initial schema"
+2025-12-09T15:58:31.130+02:00  INFO 67300 --- [  restartedMain] o.f.core.internal.command.DbMigrate      : Migrating schema "PUBLIC" to version "2 - sample data"
+2025-12-09T15:58:31.136+02:00  INFO 67300 --- [  restartedMain] o.f.core.internal.command.DbMigrate      : Successfully applied 2 migrations to schema "PUBLIC", now at version v2 (execution time 00:00.030s)
+2025-12-09T15:58:31.214+02:00  INFO 67300 --- [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-12-09T15:58:31.280+02:00  INFO 67300 --- [  restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.2.13.Final
+2025-12-09T15:58:31.282+02:00  INFO 67300 --- [  restartedMain] org.hibernate.cfg.Environment            : HHH000406: Using bytecode reflection optimizer
+2025-12-09T15:58:32.456+02:00  INFO 67300 --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-12-09T15:58:32.886+02:00  WARN 67300 --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-12-09T15:58:32.922+02:00  WARN 67300 --- [  restartedMain] .s.s.UserDetailsServiceAutoConfiguration : 
 
-Using generated security password: 823de227-cfa2-4c51-8966-b9de3ee39985
+Using generated security password: e070f57b-1f0d-45a6-9c07-ec64482df6bd
 
 This generated password is for development use only. Your security configuration must be updated before running your application in production.
 
-2025-12-09T14:21:11.853+02:00  INFO 40859 --- [  restartedMain] za.co.ccos.ClinicalCopilotApplication    : Started ClinicalCopilotApplication in 5.05 seconds (process running for 5.529)
+2025-12-09T15:58:33.790+02:00  INFO 67300 --- [  restartedMain] za.co.ccos.ClinicalCopilotApplication    : Started ClinicalCopilotApplication in 5.915 seconds (process running for 6.5)
+2025-12-09T15:58:34.351+02:00  INFO 67300 --- [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-12-09T15:58:34.551+02:00  INFO 67300 --- [nio-8080-exec-1] za.co.ccos.web.ConsultationController    : Received consultation upload for patient 550e8400-e29b-41d4-a716-446655440001
+2025-12-09T15:58:34.704+02:00  INFO 67300 --- [         task-1] z.co.ccos.app.ConsultationOrchestrator   : Starting async processing of consultation 4840bc4f-8c9b-4e5e-8539-336cfe2650f9
+2025-12-09T15:58:34.729+02:00  INFO 67300 --- [         task-1] z.co.ccos.app.ConsultationOrchestrator   : Processing consultation 4840bc4f-8c9b-4e5e-8539-336cfe2650f9 for patient 550e8400-e29b-41d4-a716-446655440001
+2025-12-09T15:58:34.733+02:00  INFO 67300 --- [         task-1] za.co.ccos.app.PerceptionService         : Running perception agent for patient 550e8400-e29b-41d4-a716-446655440001
+2025-12-09T15:58:34.733+02:00  INFO 67300 --- [         task-1] za.co.ccos.infra.llm.MockLlamaAdapter    : Mock LLAMA processing prompt (length: 711)
+2025-12-09T15:58:34.761+02:00  WARN 67300 --- [nio-8080-exec-2] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Failed to convert value of type 'java.lang.String' to required type 'java.util.UUID'; Invalid UUID string: undefined]
+2025-12-09T15:58:36.257+02:00  INFO 67300 --- [         task-1] za.co.ccos.app.DocumentationService      : Running documentation agent for consultation 4840bc4f-8c9b-4e5e-8539-336cfe2650f9
+2025-12-09T15:58:36.258+02:00  INFO 67300 --- [         task-1] za.co.ccos.infra.llm.MockLlamaAdapter    : Mock LLAMA processing prompt (length: 930)
+2025-12-09T15:58:37.763+02:00  INFO 67300 --- [         task-1] za.co.ccos.app.CoordinationService       : Running coordination agent
+2025-12-09T15:58:37.764+02:00  INFO 67300 --- [         task-1] za.co.ccos.infra.llm.MockLlamaAdapter    : Mock LLAMA processing prompt (length: 1310)
+2025-12-09T15:58:39.266+02:00  INFO 67300 --- [         task-1] za.co.ccos.app.ComplianceService         : Running compliance agent
+2025-12-09T15:58:39.267+02:00  INFO 67300 --- [         task-1] za.co.ccos.infra.llm.MockLlamaAdapter    : Mock LLAMA processing prompt (length: 1313)
+2025-12-09T15:58:40.767+02:00  INFO 67300 --- [         task-1] z.co.ccos.app.ConsultationOrchestrator   : Compliance check result: {
+  "allergy_conflicts": [],
+  "drug_interactions": [],
+  "completeness_score": 0.92,
+  "missing_elements": [],
+  "compliance_passed": true
+}
+2025-12-09T15:58:40.789+02:00  INFO 67300 --- [         task-1] z.co.ccos.app.ConsultationOrchestrator   : Consultation 4840bc4f-8c9b-4e5e-8539-336cfe2650f9 processed successfully
+2025-12-09T16:02:55.373+02:00  INFO 67300 --- [nio-8080-exec-7] za.co.ccos.web.ConsultationController    : Received consultation upload for patient 550e8400-e29b-41d4-a716-446655440001
+2025-12-09T16:02:55.464+02:00  INFO 67300 --- [         task-2] z.co.ccos.app.ConsultationOrchestrator   : Starting async processing of consultation 55de35de-edba-4606-a050-f904b8635e22
+2025-12-09T16:02:55.499+02:00  INFO 67300 --- [         task-2] z.co.ccos.app.ConsultationOrchestrator   : Processing consultation 55de35de-edba-4606-a050-f904b8635e22 for patient 550e8400-e29b-41d4-a716-446655440001
+2025-12-09T16:02:55.502+02:00  INFO 67300 --- [         task-2] za.co.ccos.app.PerceptionService         : Running perception agent for patient 550e8400-e29b-41d4-a716-446655440001
+2025-12-09T16:02:55.503+02:00  INFO 67300 --- [         task-2] za.co.ccos.infra.llm.MockLlamaAdapter    : Mock LLAMA processing prompt (length: 681)
+2025-12-09T16:02:55.551+02:00  WARN 67300 --- [nio-8080-exec-8] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Failed to convert value of type 'java.lang.String' to required type 'java.util.UUID'; Invalid UUID string: undefined]
+2025-12-09T16:02:57.006+02:00  INFO 67300 --- [         task-2] za.co.ccos.app.DocumentationService      : Running documentation agent for consultation 55de35de-edba-4606-a050-f904b8635e22
+2025-12-09T16:02:57.007+02:00  INFO 67300 --- [         task-2] za.co.ccos.infra.llm.MockLlamaAdapter    : Mock LLAMA processing prompt (length: 827)
+2025-12-09T16:02:58.512+02:00  INFO 67300 --- [         task-2] za.co.ccos.app.CoordinationService       : Running coordination agent
+2025-12-09T16:02:58.513+02:00  INFO 67300 --- [         task-2] za.co.ccos.infra.llm.MockLlamaAdapter    : Mock LLAMA processing prompt (length: 1150)
+2025-12-09T16:03:00.014+02:00  INFO 67300 --- [         task-2] za.co.ccos.app.ComplianceService         : Running compliance agent
+2025-12-09T16:03:00.015+02:00  INFO 67300 --- [         task-2] za.co.ccos.infra.llm.MockLlamaAdapter    : Mock LLAMA processing prompt (length: 1211)
+2025-12-09T16:03:00.400+02:00  INFO 67300 --- [nio-8080-exec-9] za.co.ccos.web.ConsultationController    : Received consultation upload for patient 550e8400-e29b-41d4-a716-446655440001
+2025-12-09T16:03:00.407+02:00  INFO 67300 --- [         task-3] z.co.ccos.app.ConsultationOrchestrator   : Starting async processing of consultation a188221c-b1cf-407d-a15e-3aee4ea04a96
+2025-12-09T16:03:00.424+02:00  WARN 67300 --- [io-8080-exec-10] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Failed to convert value of type 'java.lang.String' to required type 'java.util.UUID'; Invalid UUID string: undefined]
+2025-12-09T16:03:00.424+02:00  INFO 67300 --- [         task-3] z.co.ccos.app.ConsultationOrchestrator   : Processing consultation a188221c-b1cf-407d-a15e-3aee4ea04a96 for patient 550e8400-e29b-41d4-a716-446655440001
+2025-12-09T16:03:00.425+02:00  INFO 67300 --- [         task-3] za.co.ccos.app.PerceptionService         : Running perception agent for patient 550e8400-e29b-41d4-a716-446655440001
+2025-12-09T16:03:00.425+02:00  INFO 67300 --- [         task-3] za.co.ccos.infra.llm.MockLlamaAdapter    : Mock LLAMA processing prompt (length: 681)
+2025-12-09T16:03:01.515+02:00  INFO 67300 --- [         task-2] z.co.ccos.app.ConsultationOrchestrator   : Compliance check result: {
+  "allergy_conflicts": [],
+  "drug_interactions": [],
+  "completeness_score": 0.92,
+  "missing_elements": [],
+  "compliance_passed": true
+}
+2025-12-09T16:03:01.523+02:00  INFO 67300 --- [         task-2] z.co.ccos.app.ConsultationOrchestrator   : Consultation 55de35de-edba-4606-a050-f904b8635e22 processed successfully
+2025-12-09T16:03:01.927+02:00  INFO 67300 --- [         task-3] za.co.ccos.app.DocumentationService      : Running documentation agent for consultation a188221c-b1cf-407d-a15e-3aee4ea04a96
+2025-12-09T16:03:01.927+02:00  INFO 67300 --- [         task-3] za.co.ccos.infra.llm.MockLlamaAdapter    : Mock LLAMA processing prompt (length: 827)
+2025-12-09T16:03:03.429+02:00  INFO 67300 --- [         task-3] za.co.ccos.app.CoordinationService       : Running coordination agent
+2025-12-09T16:03:03.429+02:00  INFO 67300 --- [         task-3] za.co.ccos.infra.llm.MockLlamaAdapter    : Mock LLAMA processing prompt (length: 1150)
+2025-12-09T16:03:04.932+02:00  INFO 67300 --- [         task-3] za.co.ccos.app.ComplianceService         : Running compliance agent
+2025-12-09T16:03:04.932+02:00  INFO 67300 --- [         task-3] za.co.ccos.infra.llm.MockLlamaAdapter    : Mock LLAMA processing prompt (length: 1211)
+2025-12-09T16:03:06.433+02:00  INFO 67300 --- [         task-3] z.co.ccos.app.ConsultationOrchestrator   : Compliance check result: {
+  "allergy_conflicts": [],
+  "drug_interactions": [],
+  "completeness_score": 0.92,
+  "missing_elements": [],
+  "compliance_passed": true
+}
+2025-12-09T16:03:06.448+02:00  INFO 67300 --- [         task-3] z.co.ccos.app.ConsultationOrchestrator   : Consultation a188221c-b1cf-407d-a15e-3aee4ea04a96 processed successfully
+2025-12-09T16:05:11.607+02:00  INFO 67300 --- [nio-8080-exec-9] za.co.ccos.web.ConsultationController    : Received consultation upload for patient 550e8400-e29b-41d4-a716-446655440002
+2025-12-09T16:05:11.887+02:00  INFO 67300 --- [         task-4] z.co.ccos.app.ConsultationOrchestrator   : Starting async processing of consultation cbdf70d0-4f4e-4c9a-83be-b750d9f858e4
+2025-12-09T16:05:11.935+02:00  INFO 67300 --- [         task-4] z.co.ccos.app.ConsultationOrchestrator   : Processing consultation cbdf70d0-4f4e-4c9a-83be-b750d9f858e4 for patient 550e8400-e29b-41d4-a716-446655440002
+2025-12-09T16:05:11.944+02:00  INFO 67300 --- [         task-4] za.co.ccos.app.PerceptionService         : Running perception agent for patient 550e8400-e29b-41d4-a716-446655440002
+2025-12-09T16:05:11.945+02:00  INFO 67300 --- [         task-4] za.co.ccos.infra.llm.MockLlamaAdapter    : Mock LLAMA processing prompt (length: 705)
+2025-12-09T16:05:12.009+02:00  WARN 67300 --- [io-8080-exec-10] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Failed to convert value of type 'java.lang.String' to required type 'java.util.UUID'; Invalid UUID string: undefined]
+2025-12-09T16:05:13.457+02:00  INFO 67300 --- [         task-4] za.co.ccos.app.DocumentationService      : Running documentation agent for consultation cbdf70d0-4f4e-4c9a-83be-b750d9f858e4
+2025-12-09T16:05:13.458+02:00  INFO 67300 --- [         task-4] za.co.ccos.infra.llm.MockLlamaAdapter    : Mock LLAMA processing prompt (length: 923)
+2025-12-09T16:05:14.968+02:00  INFO 67300 --- [         task-4] za.co.ccos.app.CoordinationService       : Running coordination agent
+2025-12-09T16:05:14.968+02:00  INFO 67300 --- [         task-4] za.co.ccos.infra.llm.MockLlamaAdapter    : Mock LLAMA processing prompt (length: 1310)
+2025-12-09T16:05:16.471+02:00  INFO 67300 --- [         task-4] za.co.ccos.app.ComplianceService         : Running compliance agent
+2025-12-09T16:05:16.471+02:00  INFO 67300 --- [         task-4] za.co.ccos.infra.llm.MockLlamaAdapter    : Mock LLAMA processing prompt (length: 1309)
+2025-12-09T16:05:17.977+02:00  INFO 67300 --- [         task-4] z.co.ccos.app.ConsultationOrchestrator   : Compliance check result: {
+  "allergy_conflicts": [],
+  "drug_interactions": [],
+  "completeness_score": 0.92,
+  "missing_elements": [],
+  "compliance_passed": true
+}
+2025-12-09T16:05:18.006+02:00  INFO 67300 --- [         task-4] z.co.ccos.app.ConsultationOrchestrator   : Consultation cbdf70d0-4f4e-4c9a-83be-b750d9f858e4 processed successfully
+2025-12-09T16:05:38.812+02:00  INFO 67300 --- [nio-8080-exec-3] za.co.ccos.web.ConsultationController    : Received consultation upload for patient 550e8400-e29b-41d4-a716-446655440001
+2025-12-09T16:05:38.830+02:00  INFO 67300 --- [         task-5] z.co.ccos.app.ConsultationOrchestrator   : Starting async processing of consultation 3b00a17a-1692-4ea8-82b8-936e1b4a5a9b
+2025-12-09T16:05:38.853+02:00  WARN 67300 --- [nio-8080-exec-4] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Failed to convert value of type 'java.lang.String' to required type 'java.util.UUID'; Invalid UUID string: undefined]
+2025-12-09T16:05:38.853+02:00  INFO 67300 --- [         task-5] z.co.ccos.app.ConsultationOrchestrator   : Processing consultation 3b00a17a-1692-4ea8-82b8-936e1b4a5a9b for patient 550e8400-e29b-41d4-a716-446655440001
+2025-12-09T16:05:38.854+02:00  INFO 67300 --- [         task-5] za.co.ccos.app.PerceptionService         : Running perception agent for patient 550e8400-e29b-41d4-a716-446655440001
+2025-12-09T16:05:38.855+02:00  INFO 67300 --- [         task-5] za.co.ccos.infra.llm.MockLlamaAdapter    : Mock LLAMA processing prompt (length: 681)
+2025-12-09T16:05:40.358+02:00  INFO 67300 --- [         task-5] za.co.ccos.app.DocumentationService      : Running documentation agent for consultation 3b00a17a-1692-4ea8-82b8-936e1b4a5a9b
+2025-12-09T16:05:40.359+02:00  INFO 67300 --- [         task-5] za.co.ccos.infra.llm.MockLlamaAdapter    : Mock LLAMA processing prompt (length: 827)
+2025-12-09T16:05:41.862+02:00  INFO 67300 --- [         task-5] za.co.ccos.app.CoordinationService       : Running coordination agent
+2025-12-09T16:05:41.862+02:00  INFO 67300 --- [         task-5] za.co.ccos.infra.llm.MockLlamaAdapter    : Mock LLAMA processing prompt (length: 1150)
+2025-12-09T16:05:43.365+02:00  INFO 67300 --- [         task-5] za.co.ccos.app.ComplianceService         : Running compliance agent
+2025-12-09T16:05:43.366+02:00  INFO 67300 --- [         task-5] za.co.ccos.infra.llm.MockLlamaAdapter    : Mock LLAMA processing prompt (length: 1211)
+2025-12-09T16:05:43.399+02:00  INFO 67300 --- [nio-8080-exec-5] za.co.ccos.web.ConsultationController    : Received consultation upload for patient 550e8400-e29b-41d4-a716-446655440002
+2025-12-09T16:05:43.417+02:00  INFO 67300 --- [         task-6] z.co.ccos.app.ConsultationOrchestrator   : Starting async processing of consultation e31196d5-81a2-430b-8e85-93743193f490
+2025-12-09T16:05:43.428+02:00  INFO 67300 --- [         task-6] z.co.ccos.app.ConsultationOrchestrator   : Processing consultation e31196d5-81a2-430b-8e85-93743193f490 for patient 550e8400-e29b-41d4-a716-446655440002
+2025-12-09T16:05:43.428+02:00  INFO 67300 --- [         task-6] za.co.ccos.app.PerceptionService         : Running perception agent for patient 550e8400-e29b-41d4-a716-446655440002
+2025-12-09T16:05:43.428+02:00  INFO 67300 --- [         task-6] za.co.ccos.infra.llm.MockLlamaAdapter    : Mock LLAMA processing prompt (length: 705)
+2025-12-09T16:05:43.437+02:00  WARN 67300 --- [nio-8080-exec-6] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Failed to convert value of type 'java.lang.String' to required type 'java.util.UUID'; Invalid UUID string: undefined]
+2025-12-09T16:05:44.867+02:00  INFO 67300 --- [         task-5] z.co.ccos.app.ConsultationOrchestrator   : Compliance check result: {
+  "allergy_conflicts": [],
+  "drug_interactions": [],
+  "completeness_score": 0.92,
+  "missing_elements": [],
+  "compliance_passed": true
+}
+2025-12-09T16:05:44.876+02:00  INFO 67300 --- [         task-5] z.co.ccos.app.ConsultationOrchestrator   : Consultation 3b00a17a-1692-4ea8-82b8-936e1b4a5a9b processed successfully
+2025-12-09T16:05:44.933+02:00  INFO 67300 --- [         task-6] za.co.ccos.app.DocumentationService      : Running documentation agent for consultation e31196d5-81a2-430b-8e85-93743193f490
+2025-12-09T16:05:44.933+02:00  INFO 67300 --- [         task-6] za.co.ccos.infra.llm.MockLlamaAdapter    : Mock LLAMA processing prompt (length: 923)
+2025-12-09T16:05:46.439+02:00  INFO 67300 --- [         task-6] za.co.ccos.app.CoordinationService       : Running coordination agent
+2025-12-09T16:05:46.439+02:00  INFO 67300 --- [         task-6] za.co.ccos.infra.llm.MockLlamaAdapter    : Mock LLAMA processing prompt (length: 1310)
+2025-12-09T16:05:47.944+02:00  INFO 67300 --- [         task-6] za.co.ccos.app.ComplianceService         : Running compliance agent
+2025-12-09T16:05:47.944+02:00  INFO 67300 --- [         task-6] za.co.ccos.infra.llm.MockLlamaAdapter    : Mock LLAMA processing prompt (length: 1309)
+2025-12-09T16:05:49.445+02:00  INFO 67300 --- [         task-6] z.co.ccos.app.ConsultationOrchestrator   : Compliance check result: {
+  "allergy_conflicts": [],
+  "drug_interactions": [],
+  "completeness_score": 0.92,
+  "missing_elements": [],
+  "compliance_passed": true
+}
+2025-12-09T16:05:49.461+02:00  INFO 67300 --- [         task-6] z.co.ccos.app.ConsultationOrchestrator   : Consultation e31196d5-81a2-430b-8e85-93743193f490 processed successfully
+2025-12-09T16:09:03.334+02:00  INFO 67300 --- [io-8080-exec-10] za.co.ccos.web.ConsultationController    : Received consultation upload for patient 550e8400-e29b-41d4-a716-446655440001
+2025-12-09T16:09:03.536+02:00  INFO 67300 --- [         task-7] z.co.ccos.app.ConsultationOrchestrator   : Starting async processing of consultation 8d35b694-894c-4ede-a466-21d7c3f07dee
+2025-12-09T16:09:03.558+02:00  INFO 67300 --- [         task-7] z.co.ccos.app.ConsultationOrchestrator   : Processing consultation 8d35b694-894c-4ede-a466-21d7c3f07dee for patient 550e8400-e29b-41d4-a716-446655440001
+2025-12-09T16:09:03.563+02:00  INFO 67300 --- [         task-7] za.co.ccos.app.PerceptionService         : Running perception agent for patient 550e8400-e29b-41d4-a716-446655440001
+2025-12-09T16:09:03.564+02:00  INFO 67300 --- [         task-7] za.co.ccos.infra.llm.MockLlamaAdapter    : Mock LLAMA processing prompt (length: 723)
+2025-12-09T16:09:05.071+02:00  INFO 67300 --- [         task-7] za.co.ccos.app.DocumentationService      : Running documentation agent for consultation 8d35b694-894c-4ede-a466-21d7c3f07dee
+2025-12-09T16:09:05.071+02:00  INFO 67300 --- [         task-7] za.co.ccos.infra.llm.MockLlamaAdapter    : Mock LLAMA processing prompt (length: 869)
+2025-12-09T16:09:06.575+02:00  INFO 67300 --- [         task-7] za.co.ccos.app.CoordinationService       : Running coordination agent
+2025-12-09T16:09:06.575+02:00  INFO 67300 --- [         task-7] za.co.ccos.infra.llm.MockLlamaAdapter    : Mock LLAMA processing prompt (length: 1150)
+2025-12-09T16:09:08.077+02:00  INFO 67300 --- [         task-7] za.co.ccos.app.ComplianceService         : Running compliance agent
+2025-12-09T16:09:08.077+02:00  INFO 67300 --- [         task-7] za.co.ccos.infra.llm.MockLlamaAdapter    : Mock LLAMA processing prompt (length: 1211)
+2025-12-09T16:09:09.578+02:00  INFO 67300 --- [         task-7] z.co.ccos.app.ConsultationOrchestrator   : Compliance check result: {
+  "allergy_conflicts": [],
+  "drug_interactions": [],
+  "completeness_score": 0.92,
+  "missing_elements": [],
+  "compliance_passed": true
+}
+2025-12-09T16:09:09.618+02:00  INFO 67300 --- [         task-7] z.co.ccos.app.ConsultationOrchestrator   : Consultation 8d35b694-894c-4ede-a466-21d7c3f07dee processed successfully

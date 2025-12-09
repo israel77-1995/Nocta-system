@@ -34,7 +34,7 @@ public class Patient {
     
     private String allergies;
     
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "patient_chronic_conditions", joinColumns = @JoinColumn(name = "patient_id"))
     @Column(name = "condition")
     private List<String> chronicConditions = new ArrayList<>();
@@ -44,5 +44,12 @@ public class Patient {
         if (this.id == null) {
             this.id = UUID.randomUUID();
         }
+    }
+    
+    public List<String> getAllergies() {
+        if (allergies == null || allergies.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return List.of(allergies.split(",\\s*"));
     }
 }

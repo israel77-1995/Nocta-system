@@ -38,6 +38,7 @@ function login() {
         return;
     }
     currentClinician = clinicianId;
+    console.log('Logged in as clinician:', currentClinician);
     showScreen('patientScreen');
 }
 
@@ -50,6 +51,8 @@ function logout() {
 function selectPatient(patientId, patientName) {
     currentPatient = patientId;
     currentPatientName = patientName;
+    console.log('Selected patient:', currentPatient, currentPatientName);
+    console.log('Current clinician:', currentClinician);
     document.getElementById('patientName').textContent = patientName;
     document.getElementById('transcript').value = '';
     document.getElementById('submitBtn').disabled = true;
@@ -171,7 +174,20 @@ async function submitConsultation() {
         return;
     }
 
-    alert('DEBUG: Starting submission for patient ' + currentPatient);
+    console.log('Submitting consultation:', { patientId: currentPatient, clinicianId: currentClinician, transcript: transcript.substring(0, 50) });
+    
+    if (!currentPatient || currentPatient === 'undefined') {
+        alert('Error: No patient selected. Patient ID: ' + currentPatient);
+        backToPatients();
+        return;
+    }
+    
+    if (!currentClinician || currentClinician === 'undefined') {
+        alert('Error: Not logged in. Clinician ID: ' + currentClinician);
+        logout();
+        return;
+    }
+    
     showScreen('resultsScreen');
     const loadingEl = document.getElementById('loadingSpinner');
     loadingEl.style.display = 'flex';
@@ -191,17 +207,20 @@ async function submitConsultation() {
     animateProcessingSteps();
 
     try {
+        const payload = {
+            patientId: currentPatient,
+            clinicianId: currentClinician,
+            rawTranscript: transcript
+        };
+        
+        console.log('API Payload:', JSON.stringify(payload));
+        
         const data = await apiCall('/consultations/upload-audio', {
             method: 'POST',
-            body: JSON.stringify({
-                patientId: currentPatient,
-                clinicianId: currentClinician,
-                rawTranscript: transcript,
-                audioUrl: null
-            })
+            body: JSON.stringify(payload)
         });
 
-        consultationId = data.id;
+        consultationId = data.consultationId || data.id;
         console.log('Consultation submitted with ID:', consultationId);
 
         await pollConsultationStatus(consultationId);
