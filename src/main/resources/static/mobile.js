@@ -499,9 +499,23 @@ async function loadConsultationDetails(id) {
 function displayResults(data) {
     document.getElementById('loadingSpinner').style.display = 'none';
     document.getElementById('soapNote').style.display = 'block';
-    document.getElementById('approvalSection').style.display = 'block';
-
+    
     const note = data.generatedNote;
+    
+    // Handle historical consultations without AI-generated notes
+    if (!note) {
+        document.getElementById('subjective').textContent = 'Historical consultation - no AI-generated note available';
+        document.getElementById('objective').textContent = data.rawTranscript || 'N/A';
+        document.getElementById('assessment').textContent = 'N/A';
+        document.getElementById('plan').textContent = 'N/A';
+        document.getElementById('icdCodes').innerHTML = '<p>No ICD codes available</p>';
+        document.getElementById('actionItems').innerHTML = '<p>No action items available</p>';
+        document.getElementById('complianceResults').innerHTML = '<p>Historical record - compliance checks not performed</p>';
+        document.getElementById('approvalSection').style.display = 'none';
+        return;
+    }
+    
+    document.getElementById('approvalSection').style.display = 'block';
     document.getElementById('subjective').textContent = note.soapSubjective || 'N/A';
     document.getElementById('objective').textContent = note.soapObjective || 'N/A';
     document.getElementById('assessment').textContent = note.soapAssessment || 'N/A';

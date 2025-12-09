@@ -35,7 +35,7 @@ export default function App() {
       )}
       <WebView
         ref={webViewRef}
-        source={{ uri: `${API_URL}/mobile.html?v=19` }}
+        source={{ uri: `${API_URL}/mobile.html?v=20` }}
         style={styles.webview}
         javaScriptEnabled={true}
         domStorageEnabled={true}
