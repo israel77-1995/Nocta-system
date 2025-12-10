@@ -7,10 +7,18 @@
     <meta name="mobile-web-app-capable" content="yes">
     <title>Clinical Copilot</title>
     <link rel="stylesheet" href="mobile.css?v=200">
+    <link rel="stylesheet" href="pwa-styles.css">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#4F46E5">
     <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Clinical Copilot">
+    <meta name="application-name" content="Clinical Copilot">
+    <meta name="msapplication-TileColor" content="#4F46E5">
+    <meta name="msapplication-config" content="browserconfig.xml">
 </head>
 <body>
     <div id="app">
@@ -419,5 +427,6 @@
     </div>
 
     <script src="mobile.js?v=204"></script>
+    <script src="install-prompt.js"></script>
 </body>
 </html>
