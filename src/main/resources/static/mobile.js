@@ -24,6 +24,7 @@ let currentPatientName = null;
 let isRecording = false;
 let recognition = null;
 let consultationId = null;
+let navigationHistory = [];
 
 // Utility function for API calls
 async function apiCall(endpoint, options = {}) {
@@ -44,9 +45,24 @@ async function apiCall(endpoint, options = {}) {
     return response.json();
 }
 
-function showScreen(screenId) {
+function showScreen(screenId, addToHistory = true) {
+    const currentScreen = document.querySelector('.screen.active')?.id;
+    
+    if (addToHistory && currentScreen && currentScreen !== screenId) {
+        navigationHistory.push(currentScreen);
+    }
+    
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById(screenId).classList.add('active');
+}
+
+function goBack() {
+    if (navigationHistory.length > 0) {
+        const previousScreen = navigationHistory.pop();
+        showScreen(previousScreen, false);
+    } else {
+        showScreen('dashboardScreen', false);
+    }
 }
 
 async function login() {
@@ -124,7 +140,7 @@ function displayPatients(patients) {
                 <button class="action-btn primary" onclick="event.stopPropagation(); startConsultation('${patient.id}', '${fullName}')">
                     ➕ New Visit
                 </button>
-                <button class="action-btn secondary" onclick="event.stopPropagation(); viewHistory('${patient.id}', '${fullName}')">
+                <button class="action-btn secondary" onclick="event.stopPropagation(); viewPatientHistory('${patient.id}', '${fullName}')">
                     📋 History
                 </button>
             </div>
@@ -722,8 +738,15 @@ async function viewHistory(patientId, patientName) {
     } catch (error) {
         console.error('Error loading history:', error);
         alert('Error loading patient history: ' + error.message);
-        backToPatients();
+        goBack();
     }
+}
+
+// Direct history navigation from dashboard
+async function viewPatientHistory(patientId, patientName) {
+    // Clear navigation history to ensure back goes to dashboard
+    navigationHistory = ['dashboardScreen'];
+    await viewHistory(patientId, patientName);
 }
 
 function displayHistory(consultations) {
