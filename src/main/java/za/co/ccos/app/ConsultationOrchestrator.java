@@ -30,11 +30,11 @@ public class ConsultationOrchestrator {
         try {
             log.info("Starting async processing of consultation {}", consultationId);
             
-            // Fetch consultation
+            //Fetch consultation
             Consultation consultation = consultationRepository.findById(consultationId)
                     .orElseThrow(() -> new RuntimeException("Consultation not found"));
             
-            // Update state
+            //Update state
             updateConsultationState(consultationId, ConsultationState.PROCESSING);
             
             Patient patient = patientRepository.findById(consultation.getPatientId())
@@ -42,19 +42,19 @@ public class ConsultationOrchestrator {
             
             log.info("Processing consultation {} for patient {}", consultationId, patient.getId());
             
-            // Step 1: Perception - extract structured facts
+            //Step 1: Perception - extract structured facts
             JsonNode structuredFacts = perceptionService.extractStructuredFacts(
                     consultation.getRawTranscript(), patient);
             String structuredJson = objectMapper.writeValueAsString(structuredFacts);
             
-            // Step 2: Documentation - generate SOAP note
+            //Step 2: Documentation - generate SOAP note
             GeneratedNote note = documentationService.generateDocumentation(
                     structuredJson, 
                     consultation.getRawTranscript(),
                     consultationId,
                     consultation.getClinicianId());
             
-            // Step 3: Coordination - generate actions
+            //Step 3: Coordination - generate actions
             String soapJson = objectMapper.writeValueAsString(objectMapper.createObjectNode()
                     .put("subjective", note.getSoapSubjective())
                     .put("objective", note.getSoapObjective())
@@ -64,7 +64,7 @@ public class ConsultationOrchestrator {
             String actions = coordinationService.generateActions(structuredJson, soapJson);
             note.setSuggestedActions(actions);
             
-            // Step 4: Compliance - validate
+            //Step 4: Compliance - validate
             String complianceResult = complianceService.validateCompliance(
                     soapJson, 
                     note.getIcd10Codes(),
@@ -72,7 +72,7 @@ public class ConsultationOrchestrator {
             
             log.info("Compliance check result: {}", complianceResult);
             
-            // Save note with transaction
+            //Save note with transaction
             saveNoteAndUpdateConsultation(note, consultationId);
             
             log.info("Consultation {} processed successfully", consultationId);
